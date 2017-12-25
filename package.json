@@ -1,0 +1,71 @@
+{
+  "name": "aiserver",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app/app.js",
+  "scripts": {
+    "style": "scss --watch style/index.scss:dist/render.css",
+    "style-render": "scss --style compressed style/index.scss:dist/render.css",
+    "build:server": "babel src/server -d dist/server",
+    "build:client": "webpack",
+    "build": "cross-env NODE_ENV=production npm-run-all build:server build:client",
+    "run": "cross-env NODE_ENV=production node dist/server/app",
+    "dev": "cross-env NODE_ENV=development nodemon src/server/app.js --exec babel-node",
+    "test": "mocha --compilers js:babel-core/register"
+  },
+  "keywords": [
+    "phamhongphuc",
+    "node",
+    "server"
+  ],
+  "author": "phamhongphuc.info@gmail.com",
+  "license": "ISC",
+  "nodemonConfig": {
+    "watch": [
+      "src/server"
+    ]
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.1",
+    "express-session": "^1.15.6",
+    "lokijs": "^1.5.0",
+    "moment": "^2.18.1",
+    "realm": "^1.13.0",
+    "socket.io": "^2.0.3",
+    "vue": "^2.4.4",
+    "vuex": "^2.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-minify": "^0.2.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "chalk": "^2.1.0",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.8.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-vue": "^2.0.2",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-html": "^3.2.2",
+    "eslint-plugin-vue": "^2.1.0",
+    "file-loader": "^1.1.4",
+    "html-webpack-plugin": "^2.30.1",
+    "json-loader": "^0.5.7",
+    "mocha": "^3.5.3",
+    "newman": "^3.8.2",
+    "npm-run-all": "^4.1.1",
+    "vue-eslint-parser": "^1.0.0",
+    "vue-hot-reload-api": "^2.1.0",
+    "vue-loader": "^13.0.5",
+    "vue-template-compiler": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-dev-server": "^2.9.1",
+    "webpack-hot-middleware": "^2.19.1",
+    "webpack-split-by-path": "^2.0.0"
+  }
+}
