@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import AppExpress from './express/express';
 import AppSocket from './socket/socket';
 import AppConfig from './config/config';
+import AppRealm from './realm/realm';
 
 let app = express();
 let port = process.env.PORT || 5;
@@ -19,6 +20,7 @@ console.log(chalk.bgMagenta(
         '\n ----- [ Productions Environment ] ----- '
 ));
 
+AppRealm(app);
 AppConfig(app, io);
 AppExpress(app);
 AppSocket(io);
