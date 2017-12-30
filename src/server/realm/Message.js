@@ -1,7 +1,8 @@
 module.exports = {
     name: 'Message',
-    primaryKey: 'time',
+    primaryKey: 'id',
     properties: {
+        id: 'int',
         time: 'date',
         sender: 'User',
         idchannel: 'Channel',
