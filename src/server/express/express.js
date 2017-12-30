@@ -8,17 +8,17 @@ export default function (app) {
         );
     });
     app.get('/add', (req, res) => {
-        app.realm.write(() => {
-            const u = app.realm.create('user', {
-                fbid: '123efhjhg',
-                name: 'phúcsdfsd fs'
+        app.realm.write(()=>{
+            app.realm.create('User', {
+                fbid: '123',
+                name: 'phúc'
             });
             res.json(u.fbid);
         });
     });
     app.get('/post', (req, res) => {
         res.json({
-            users: app.realm.objects('user')
+            db : app.realm.objects('User')
         });
     });
     app.get('*', (req, res) => {

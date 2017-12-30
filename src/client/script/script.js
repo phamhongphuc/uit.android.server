@@ -8,6 +8,6 @@ new Vue({
         ref: 'app'
     }),
     created: function () {
-        io();
+        // io();
     }
 });
