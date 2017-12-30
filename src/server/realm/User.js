@@ -10,4 +10,4 @@ module.exports = {
         description: 'string?',
         projects: 'Project[]'
     }
-}
+};

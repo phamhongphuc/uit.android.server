@@ -7,4 +7,4 @@ module.exports = {
         idchannel: 'Channel',
         content: 'string'
     }
-}
+};

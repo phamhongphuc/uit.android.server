@@ -11,4 +11,4 @@ module.exports = {
         subcribers: 'User[]',
         status: 'int'
     }
-}
+};
