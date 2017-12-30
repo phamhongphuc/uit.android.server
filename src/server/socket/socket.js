@@ -1,25 +1,16 @@
-import fb from 'fb';
+import socketUser from './socket.User';
 
 // io là toàn bộ các máy con
 // client là 1 máy con duy nhất
 
-export default function (io) {
+export default function (app, io) {
+    let realm = app.realm;
     io.on('connection', (client) => {
         let sessionID = client.request.sessionID,
             socketID = client.id;
         // Mỗi thiết bị là 1 sessionID, 1 sessionID có thể có nhiều socketID
         console.log(`\n\n${socketID} - ${sessionID} in`);
-        client.on('SetAccessToken', (data) => {
-            // Khi người dùng phía client đăng nhập xong, họ sẽ gửi lên máy chủ một accessToken
-            // Lưu cái đó vào trong cơ sở dữ liệu tạm thời
-            console.log(data);
-            fb.api('me', {
-                fields: ['id', 'name'],
-                access_token: data
-            }, (res) => {
-                console.log(res);
-            });
-        });
+        socketUser(io, client, realm);
         client.on('disconnect', () => {
             console.log(`${socketID} out`);
         });

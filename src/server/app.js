@@ -23,7 +23,7 @@ console.log(chalk.bgMagenta(
 AppRealm(app);
 AppConfig(app, io);
 AppExpress(app);
-AppSocket(io);
+AppSocket(app,io);
 
 server.listen(port);
 
