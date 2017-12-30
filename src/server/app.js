@@ -8,7 +8,7 @@ import AppExpress from './express/express';
 import AppSocket from './socket/socket';
 import AppConfig from './config/config';
 import AppRealm from './realm/realm';
-
+import AppLog from './console/log';
 let app = express();
 let port = process.env.PORT || 5;
 let server = http.createServer(app);
@@ -24,6 +24,7 @@ AppRealm(app);
 AppConfig(app, io);
 AppExpress(app);
 AppSocket(app,io);
+AppLog(app);
 
 server.listen(port);
 

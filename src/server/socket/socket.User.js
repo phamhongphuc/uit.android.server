@@ -23,6 +23,7 @@ module.exports = function (io, client, realm) {
                         name: res.name,
                         email: res.email
                     }, true);
+                    client.emit('Login',res);
                 });
             }
             console.log(res);
