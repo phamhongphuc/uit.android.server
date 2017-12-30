@@ -11,7 +11,8 @@
     "build": "cross-env NODE_ENV=production npm-run-all build:server build:client",
     "run": "cross-env NODE_ENV=production node dist/server/app",
     "dev": "cross-env NODE_ENV=development nodemon src/server/app.js --exec babel-node",
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "clear": "rmdir \"src\\database\" /s/q"
   },
   "keywords": [
     "phamhongphuc",
@@ -30,6 +31,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.1",
     "express-session": "^1.15.6",
+    "fb": "^2.0.0",
     "lokijs": "^1.5.0",
     "moment": "^2.18.1",
     "realm": "^1.13.0",
