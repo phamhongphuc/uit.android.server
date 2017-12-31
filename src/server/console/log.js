@@ -1,7 +1,21 @@
 module.exports = function (app) {
 
+    let realm = app.realm;
 
+    let task = {
+        id: 0,
+        name: 'yeah'
+    };
+    realm.write(() => {
+        let newTask = realm.create('Task', {
+            id: task.id,
+            name: task.name
+        }, true);
+        console.log(newTask);
+    });
 
+    // client.on('EditTask', (task) => {
+    // });
     // let user = app.realm
     //     .objects('User')
     //     .filtered('id == $0', '891448197630355')[0];

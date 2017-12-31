@@ -37,7 +37,7 @@ module.exports = function (io, client, realm) {
     });
     // Show ra toàn bộ Project Id mà user đã tham gia
     client.on('GetAllProjectIdInUser', (userId) => {
-        let user = realm.objects('User').filtered('id == $0', userId)[0];
+        let user = getUserById(userId);
         let projectsID = [];
         user.projects.forEach(project => {
             projectsID.push(project.id);
@@ -47,8 +47,12 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của user
-    client.on('GetUser', (userId) => {
-        let user = realm.objects('User').filtered('id==$0', userId)[0];
-        client.emit('UserData', user);
+    client.on('GetUserById', (userId) => {
+        let user = getUserById(userId);
+        client.emit('Return User', user);
     });
+
+    function getUserById(userId) {
+        return realm.objects('User').filtered('id == $0', userId)[0];
+    }
 };

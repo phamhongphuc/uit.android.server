@@ -1,9 +1,6 @@
 module.exports = function (io, client, realm) {
-    client.on('ProjectStatus', (userId) => {
-        realm.objects('User').filtered('id == $0', userId);
-    });
     client.on('ProjectExist', (userId) => {
-        let user = realm.objects('User').filtered('id==$0', userId)[0];
+        let user = getUserById(userId);
         if (!user) {
             console.log('User không tồn tại!');
         } else if (!user.projects.length) {
@@ -67,7 +64,17 @@ module.exports = function (io, client, realm) {
         client.emit('Return Members ID', membersId);
     });
 
+    // Trả về toàn bộ thông tin của Project
+    client.on('GetProjectById', (projectId) => {
+        let project = getProjectById(projectId);
+        client.emit('Return Project', project);
+    });
+    
     function getProjectById(projectId) {
         return realm.objects('Project').filtered('id == $0', projectId)[0];
     }
+    function getUserById(userId) {
+        return realm.objects('User').filtered('id == $0', userId)[0];
+    }
+
 };

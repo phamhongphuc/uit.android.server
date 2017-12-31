@@ -6,9 +6,10 @@ module.exports = {
         name: 'string',
         createdate: 'date',
         deadline: 'date',
-        description: 'string',
+        description: 'string?',
         assigned: 'User',
         subscribers: 'User[]',
-        status: 'int'
+        status: 'int',
+        project: 'Project'
     }
 };
