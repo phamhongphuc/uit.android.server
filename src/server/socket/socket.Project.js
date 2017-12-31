@@ -33,13 +33,12 @@ module.exports = function (io, client, realm) {
     });
     // Trả về toàn bộ thông tin của một project
     client.on('ChooseProject', (projectId) => {
-        let project = realm.objects('Project').filtered('id==$0', {
-            projectId
-        })[0];
+        let project = getProjectById(projectId);
         client.emit('ProjectData', project);
     });
     // Show ra toàn bộ tên Task mà Project có
-    client.on('ShowAllTasks', (project) => {
+    client.on('ShowAllTasks', (projectId) => {
+        let project = getProjectById(projectId);
         let tasksName = [];
         project.tasks.forEach(task => {
             tasksName.push(task.name);
@@ -47,7 +46,8 @@ module.exports = function (io, client, realm) {
         console.log(tasksName);
     });
     // Show ra toàn bộ tên Channel mà Project có
-    client.on('ShowAllChannel', (project) => {
+    client.on('ShowAllChannel', (projectId) => {
+        let project = getProjectById(projectId);
         let channelsName = [];
         project.channels.forEach(channel => {
             channelsName.push(channel.name);
@@ -55,11 +55,16 @@ module.exports = function (io, client, realm) {
         console.log(channelsName);
     });
     // Show ra toàn bộ tên Member mà Project có
-    client.on('ShowAllMember', (project) => {
+    client.on('ShowAllMember', (projectId) => {
+        let project = getProjectById(projectId);
         let memberrsName = [];
         project.member.forEach(member => {
             memberrsName.push(member.name);
         });
         console.log(memberrsName);
-    }); 
+    });
+
+    function getProjectById(projectId) {
+        return realm.objects('Project').filtered('id == $0', projectId)[0];
+    }
 };
