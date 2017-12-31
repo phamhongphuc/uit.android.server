@@ -35,6 +35,7 @@ module.exports = function (io, client, realm) {
     client.on('aJson', (data) => {
         console.log(data);
     });
+    
     // Show ra toàn bộ Project Id mà user đã tham gia
     client.on('GetAllProjectIdInUser', (userId) => {
         let user = getUserById(userId);
@@ -45,6 +46,7 @@ module.exports = function (io, client, realm) {
         console.log(projectsID);
         client.emit('Return Project ID', projectsID);
     });
+
     //Edit một User
     client.on('EditUser', (user) => {
         realm.write(() => {

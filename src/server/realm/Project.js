@@ -5,6 +5,7 @@ module.exports = {
         id:'string',
         name:'string',
         tasks:'Task[]',
+        creator: 'User',
         member:'User[]',
         description:'string?',
         tags:'string[]',

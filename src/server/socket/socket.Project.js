@@ -1,3 +1,4 @@
+import moment from 'moment';
 module.exports = function (io, client, realm) {
     client.on('ProjectExist', (userId) => {
         let user = getUserById(userId);
@@ -16,6 +17,20 @@ module.exports = function (io, client, realm) {
         realm.write(() => {
             let newProject = realm.create('Task', project, true);
             client.emit('Edit a Successful Task', newProject);
+        });
+    });
+    //Create Project
+    client.on('CreateProject', (userId) => {
+        let user = getUserById(userId);
+        realm.write(() => {
+            realm.create('Task', {
+                id: getNextTaskId(),
+                name: 'newProject',
+                creator: user,
+                description:'newDescription',
+                createdate: moment().toDate(),
+                deadline: moment().add(1, 'week').toDate()
+            });
         });
     });
 
@@ -55,6 +70,10 @@ module.exports = function (io, client, realm) {
         let project = getProjectById(projectId);
         client.emit('Return Project', project);
     });
+
+    function getNextTaskId() {
+        return realm.objects('Task').max('id') + 1;
+    }
 
     function getProjectById(projectId) {
         return realm.objects('Project').filtered('id == $0', projectId)[0];
