@@ -45,6 +45,13 @@ module.exports = function (io, client, realm) {
         console.log(projectsID);
         client.emit('Return Project ID', projectsID);
     });
+    //Edit một User
+    client.on('EditUser', (user) => {
+        realm.write(() => {
+            let newUser = realm.create('User', user, true);
+            client.emit('Edit a Successful User', newUser);
+        });
+    });
 
     // Trả về toàn bộ thông tin của user
     client.on('GetUserById', (userId) => {

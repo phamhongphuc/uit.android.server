@@ -7,7 +7,7 @@ module.exports = {
         tasks:'Task[]',
         member:'User[]',
         description:'string?',
-        tags:'string[]?',
+        tags:'string[]',
         channels:'Channel[]',
         createdate:'date',
         deadline:'date'

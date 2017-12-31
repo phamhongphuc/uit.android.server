@@ -1,18 +1,30 @@
+import moment from 'moment';
 module.exports = function (app) {
 
     let realm = app.realm;
-
-    let task = {
-        id: 0,
-        name: 'yeah'
-    };
     realm.write(() => {
-        let newTask = realm.create('Task', {
-            id: task.id,
-            name: task.name
-        }, true);
-        console.log(newTask);
+        let a = realm.objects('Task').max('id');
+        console.log(a);
+        realm.create('Task',{
+            id: a+1,
+            name: 'newTask',
+            createdate: moment().toDate(),
+            deadline: moment().add(1,'week').toDate(),
+            status: 0
+            // deadline: 
+        });
     });
+    // let task = {
+    //     id: 0,
+    //     name: 'yeah'
+    // };
+    // realm.write(() => {
+    //     let newTask = realm.create('Task', {
+    //         id: task.id,
+    //         name: task.name
+    //     }, true);
+    //     console.log(newTask);
+    // });
 
     // client.on('EditTask', (task) => {
     // });

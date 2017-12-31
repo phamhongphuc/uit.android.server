@@ -1,3 +1,4 @@
+import moment from 'moment';
 module.exports = function (io, client, realm) {
     //Subscriber Join một task
     client.on('SubscriberJoinInTask', (taskId, userId) => {
@@ -33,6 +34,22 @@ module.exports = function (io, client, realm) {
             client.emit('Edit a Successful Task', newTask);
         });
     });
+    //Create Task
+    client.on('CreateTask', (userId, projectId) => {
+        let user = getUserById(userId);
+        let project = getProjectById(projectId);
+        realm.write(() => {
+            realm.create('Task', {
+                id: getNextTaskId(),
+                name: 'newTask',
+                createdate: moment().toDate(),
+                deadline: moment().add(1, 'week').toDate(),
+                status: 0,
+                assigned: user,
+                project: project
+            });
+        });
+    });
     // Show ra toàn bộ Subscribers Id mà Task có
     client.on('GetAllSubscribersInTask', (taskId) => {
         let task = getTaskById(taskId);
@@ -49,10 +66,19 @@ module.exports = function (io, client, realm) {
         client.emit('Return Task', task);
     });
 
+    function getNextTaskId() {
+        return realm.objects('Task').max('id') + 1;
+    }
+
     function getTaskById(taskId) {
         return realm.objects('Task').filtered('id == $0', taskId)[0];
     }
+
     function getUserById(userId) {
         return realm.objects('User').filtered('id == $0', userId)[0];
+    }
+
+    function getProjectById(projectId) {
+        return realm.objects('Project').filtered('id == $0', projectId)[0];
     }
 };

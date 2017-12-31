@@ -11,28 +11,14 @@ module.exports = function (io, client, realm) {
             client.emit('Notification', 'Choose project');
         }
     });
-    //Tạo một project
-    client.on('CreateProject', (project) => {
+    //Edit một Project
+    client.on('EditProject', (project) => {
         realm.write(() => {
-            let newProject = realm.create('Project', {
-                id: project.id,
-                name: project.name,
-                tasks: project.tasks,
-                member: project.member,
-                description: project.description,
-                tags: project.tags,
-                channels: project.channels,
-                createdate: project.createdate,
-                deadline: project.deadline
-            }, true);
-            client.emit('Create a Successful Project', newProject);
+            let newProject = realm.create('Task', project, true);
+            client.emit('Edit a Successful Task', newProject);
         });
     });
-    // Trả về toàn bộ thông tin của một project
-    client.on('ChooseProject', (projectId) => {
-        let project = getProjectById(projectId);
-        client.emit('ProjectData', project);
-    });
+
     // Show ra toàn bộ tên Task mà Project có
     client.on('GetAllTaskIdInProject', (projectId) => {
         let project = getProjectById(projectId);
@@ -69,10 +55,11 @@ module.exports = function (io, client, realm) {
         let project = getProjectById(projectId);
         client.emit('Return Project', project);
     });
-    
+
     function getProjectById(projectId) {
         return realm.objects('Project').filtered('id == $0', projectId)[0];
     }
+
     function getUserById(userId) {
         return realm.objects('User').filtered('id == $0', userId)[0];
     }
