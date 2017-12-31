@@ -13,14 +13,14 @@ module.exports = function (io, client, realm) {
     //     }
     // });
     //Edit một Project
-    client.on('EditProject', (project) => {
+    client.on('Edit:Project(project)', (project) => {
         realm.write(() => {
             let newProject = realm.create('Task', project, true);
             client.emit('Edit a Successful Task', newProject);
         });
     });
     //Create Project
-    client.on('CreateProject', (userId) => {
+    client.on('Create:Project(userId)', (userId) => {
         let user = getUserById(userId);
         realm.write(() => {
             realm.create('Task', {
@@ -35,7 +35,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ tên Task mà Project có
-    client.on('Project.Tasks(projectId)', (projectId) => {
+    client.on('Get:Project.Tasks(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let tasksId = [];
         project.tasks.forEach(task => {
@@ -45,7 +45,7 @@ module.exports = function (io, client, realm) {
         client.emit('Return Channels ID', tasksId);
     });
     // Show ra toàn bộ Channel Id mà Project có
-    client.on('Project.Channels(projectId)', (projectId) => {
+    client.on('Get:Project.Channels(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let channelsId = [];
         project.channels.forEach(channel => {
@@ -55,7 +55,7 @@ module.exports = function (io, client, realm) {
         client.emit('Return Channels ID', channelsId);
     });
     // Show ra toàn bộ Member Id mà Project có
-    client.on('Project.Members(projectId)', (projectId) => {
+    client.on('Get:Project.Members(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let membersId = [];
         project.member.forEach(member => {
@@ -66,7 +66,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của Project
-    client.on('GetProjectById', (projectId) => {
+    client.on('Get:Projec(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         client.emit('Return Project', project);
     });

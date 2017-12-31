@@ -1,7 +1,7 @@
 import fb from 'fb';
 
 module.exports = function (io, client, realm) {
-    client.on('GetUserByAccessToken', (accessToken) => {
+    client.on('Get:User(accessToken)', (accessToken) => {
         // data là chuỗi AccessToken
         // Khi người dùng phía client đăng nhập xong, họ sẽ gửi lên máy chủ một accessToken
         // Lưu cái đó vào trong cơ sở dữ liệu tạm thời
@@ -33,7 +33,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('User.Projects(userId)', (userId) => {
+    client.on('Get:User.Projects(userId)', (userId) => {
         let user = getUserById(userId);
         let projectsID = [];
         user.projects.forEach(project => {
@@ -44,7 +44,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Edit một User
-    client.on('EditUser', (user) => {
+    client.on('Edit:User(user)', (user) => {
         realm.write(() => {
             let newUser = realm.create('User', user, true);
             client.emit('Edit a Successful User', newUser);
@@ -52,7 +52,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của user
-    client.on('GetUserById', (userId) => {
+    client.on('Get:User(userId)', (userId) => {
         let user = getUserById(userId);
         client.emit('Return User', user);
     });

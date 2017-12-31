@@ -1,7 +1,7 @@
 import moment from 'moment';
 module.exports = function (io, client, realm) {
     //Subscriber Join một task
-    client.on('SubscriberJoinInTask', (taskId, userId) => {
+    client.on('Join:Task(userId)', (taskId, userId) => {
         realm.write(() => {
             let task = getTaskById(taskId);
             let user = getUserById(userId);
@@ -10,7 +10,7 @@ module.exports = function (io, client, realm) {
         });
     });
     //Xác nhận Task đã hoàn thành
-    client.on('CompletedTask', (taskId, userId) => {
+    client.on('Confirm:Task(taskId,userId)', (taskId, userId) => {
         let task = getTaskById(taskId);
         realm.write(() => {
             task.subscribers.some(subscriber => {
@@ -24,14 +24,14 @@ module.exports = function (io, client, realm) {
         client.emit('Confirm Task: Completed', taskId);
     });
     //Edit một task
-    client.on('EditTask', (task) => {
+    client.on('Edit:Task(task)', (task) => {
         realm.write(() => {
             let newTask = realm.create('Task', task, true);
             client.emit('Edit a Successful Task', newTask);
         });
     });
     //Create Task
-    client.on('CreateTask', (userId, projectId) => {
+    client.on('Create:Task(userId,projectId)', (userId, projectId) => {
         let user = getUserById(userId);
         let project = getProjectById(projectId);
         realm.write(() => {
@@ -47,7 +47,7 @@ module.exports = function (io, client, realm) {
         });
     });
     // Show ra toàn bộ Subscribers Id mà Task có
-    client.on('Task.Subscribers(taskId)', (taskId) => {
+    client.on('Get:Task.Subscribers(taskId)', (taskId) => {
         let task = getTaskById(taskId);
         let subscribersId = [];
         task.subscribers.forEach(subscriber => {
@@ -57,7 +57,7 @@ module.exports = function (io, client, realm) {
         client.emit('Return Subscribers ID', subscribersId);
     });
     // Trả về toàn bộ thông tin của Task
-    client.on('GetUserById', (taskId) => {
+    client.on('Get:Task(taskId)', (taskId) => {
         let task = getTaskById(taskId);
         client.emit('Return Task', task);
     });
