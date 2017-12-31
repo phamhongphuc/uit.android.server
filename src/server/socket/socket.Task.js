@@ -21,4 +21,13 @@ module.exports = function (io, client, realm) {
             client.emit('Successful', newTask);
         });
     });
+    // Show ra toàn bộ tên Subscribers mà Task có
+    client.on('ShowAllSubscribers', (taskId) => {
+        let task = realm.objects('Task').filtered('id == $0', taskId)[0];
+        let subscribersName = [];
+        task.subscribers.forEach(subscriber => {
+            subscribersName.push(subscriber.name);
+        });
+        console.log(subscribersName);
+    });
 };
