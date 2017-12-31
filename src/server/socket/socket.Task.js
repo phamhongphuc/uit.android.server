@@ -12,20 +12,16 @@ module.exports = function (io, client, realm) {
     //Xác nhận Task đã hoàn thành
     client.on('CompletedTask', (taskId, userId) => {
         let task = getTaskById(taskId);
-        let flag = false;
-        task.subscribers.forEach(subscriber => {
-            if (subscriber.id == userId) {
-                flag = true;
-            }
-        });
-        if (flag) {
-            realm.write(() => {
-                realm.create('Task', {
-                    status: 2
-                }, true);
-                client.emit('Confirm Task: Completed', taskId);
+        realm.write(() => {
+            task.subscribers.some(subscriber => {
+                if (subscriber.id == userId) {
+                    subscriber.status = 2;
+                    return true;
+                }
+                return false;
             });
-        }
+        });
+        client.emit('Confirm Task: Completed', taskId);
     });
     //Edit một task
     client.on('EditTask', (task) => {
@@ -51,7 +47,7 @@ module.exports = function (io, client, realm) {
         });
     });
     // Show ra toàn bộ Subscribers Id mà Task có
-    client.on('GetAllSubscribersInTask', (taskId) => {
+    client.on('Task.Subscribers(taskId)', (taskId) => {
         let task = getTaskById(taskId);
         let subscribersId = [];
         task.subscribers.forEach(subscriber => {

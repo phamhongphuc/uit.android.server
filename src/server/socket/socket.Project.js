@@ -1,17 +1,17 @@
 import moment from 'moment';
 module.exports = function (io, client, realm) {
-    client.on('ProjectExist', (userId) => {
-        let user = getUserById(userId);
-        if (!user) {
-            console.log('User không tồn tại!');
-        } else if (!user.projects.length) {
-            console.log('Không tồn tại project');
-            client.emit('Notification', 'Project is Empty. Create a new project');
-        } else {
-            console.log('Đã có project');
-            client.emit('Notification', 'Choose project');
-        }
-    });
+    // client.on('ProjectExist', (userId) => {
+    //     let user = getUserById(userId);
+    //     if (!user) {
+    //         console.log('User không tồn tại!');
+    //     } else if (!user.projects.length) {
+    //         console.log('Không tồn tại project');
+    //         client.emit('Notification', 'Project is Empty. Create a new project');
+    //     } else {
+    //         console.log('Đã có project');
+    //         client.emit('Notification', 'Choose project');
+    //     }
+    // });
     //Edit một Project
     client.on('EditProject', (project) => {
         realm.write(() => {
@@ -35,7 +35,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ tên Task mà Project có
-    client.on('GetAllTaskIdInProject', (projectId) => {
+    client.on('Project.Tasks(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let tasksId = [];
         project.tasks.forEach(task => {
@@ -45,7 +45,7 @@ module.exports = function (io, client, realm) {
         client.emit('Return Channels ID', tasksId);
     });
     // Show ra toàn bộ Channel Id mà Project có
-    client.on('GetAllChannelIdInProject', (projectId) => {
+    client.on('Project.Channels(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let channelsId = [];
         project.channels.forEach(channel => {
@@ -55,7 +55,7 @@ module.exports = function (io, client, realm) {
         client.emit('Return Channels ID', channelsId);
     });
     // Show ra toàn bộ Member Id mà Project có
-    client.on('GetAllMemberIdInProject', (projectId) => {
+    client.on('Project.Members(projectId)', (projectId) => {
         let project = getProjectById(projectId);
         let membersId = [];
         project.member.forEach(member => {

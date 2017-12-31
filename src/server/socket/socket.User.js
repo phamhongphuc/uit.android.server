@@ -32,12 +32,8 @@ module.exports = function (io, client, realm) {
         });
     });
 
-    client.on('aJson', (data) => {
-        console.log(data);
-    });
-    
     // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('GetAllProjectIdInUser', (userId) => {
+    client.on('User.Projects(userId)', (userId) => {
         let user = getUserById(userId);
         let projectsID = [];
         user.projects.forEach(project => {
