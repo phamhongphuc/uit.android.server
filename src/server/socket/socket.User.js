@@ -35,14 +35,15 @@ module.exports = function (io, client, realm) {
     client.on('aJson', (data) => {
         console.log(data);
     });
-    // Show ra toàn bộ tên project mà user đã tham gia
-    client.on('ShowAllProject', (userId) => {
+    // Show ra toàn bộ Project Id mà user đã tham gia
+    client.on('GetAllProjectIdInUser', (userId) => {
         let user = realm.objects('User').filtered('id == $0', userId)[0];
-        let projectsName = [];
+        let projectsID = [];
         user.projects.forEach(project => {
-            projectsName.push(project.name);
+            projectsID.push(project.id);
         });
-        console.log(projectsName);
+        console.log(projectsID);
+        client.emit('Return Project ID', projectsID);
     });
 
     // Trả về toàn bộ thông tin của user

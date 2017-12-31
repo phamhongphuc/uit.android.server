@@ -1,9 +1,25 @@
 module.exports = function (io, client, realm) {
+    //Xác nhận Task đã hoàn thành
+    client.on('CompletedTask', (taskId, userId) => {
+        let task = realm.objects('Task').filtered('id == $0', taskId)[0];
+        let flag = false;
+        task.subscribers.forEach(subscriber => {
+            if(subscriber.id == userId){
+                flag = true;
+            }
+        });
+        if (flag) {
+            realm.write(() => {
+                task = realm.create('Task', {
+                    status: 2
+                }, true);
+                client.emit('Confirm Task: Completed', taskId);
+            });
+        }
+    });
     //Trả về toàn bộ thông tin của một Task
     client.on('ChooseTask', (taskId) => {
-        let task = realm.objects('Task').filtered('id==$0', {
-            taskId
-        })[0];
+        let task = realm.objects('Task').filtered('id == $0', taskId)[0];
         client.emit('TaskData', task);
     });
     //Tạo mới một task
@@ -21,13 +37,14 @@ module.exports = function (io, client, realm) {
             client.emit('Successful', newTask);
         });
     });
-    // Show ra toàn bộ tên Subscribers mà Task có
-    client.on('ShowAllSubscribers', (taskId) => {
+    // Show ra toàn bộ Subscribers Id mà Task có
+    client.on('GetAllSubscribersInTask', (taskId) => {
         let task = realm.objects('Task').filtered('id == $0', taskId)[0];
-        let subscribersName = [];
+        let subscribersId = [];
         task.subscribers.forEach(subscriber => {
-            subscribersName.push(subscriber.name);
+            subscribersId.push(subscriber.id);
         });
-        console.log(subscribersName);
+        console.log(subscribersId);
+        client.emit('Return Subscribers ID', subscribersId);
     });
 };
