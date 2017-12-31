@@ -14,6 +14,7 @@ module.exports = function (io, client, realm) {
             client.emit('Send', 'Chọn project');
         }
     });
+    //Tạo một project
     client.on('CreateProject', (project) => {
         realm.write(() => {
             let newProject = realm.create('Project', {
@@ -30,7 +31,7 @@ module.exports = function (io, client, realm) {
             client.emit('Successful', newProject);
         });
     });
-    // Thông tin của 1 project
+    // Trả về toàn bộ thông tin của một project
     client.on('ChooseProject', (projectId) => {
         let project = realm.objects('Project').filtered('id==$0', {
             projectId
