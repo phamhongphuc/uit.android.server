@@ -1,7 +1,7 @@
 import fb from 'fb';
 
 module.exports = function (io, client, realm) {
-    client.on('SetAccessToken', (accessToken) => {
+    client.on('GetUserByAccessToken', (accessToken) => {
         // data là chuỗi AccessToken
         // Khi người dùng phía client đăng nhập xong, họ sẽ gửi lên máy chủ một accessToken
         // Lưu cái đó vào trong cơ sở dữ liệu tạm thời
@@ -18,12 +18,14 @@ module.exports = function (io, client, realm) {
                 });
             } else {
                 realm.write(() => {
-                    realm.create('User', {
+                    // Vừa ghi đè, vừa lấy ra thông tin
+                    let user = realm.create('User', {
                         id: res.id,
                         name: res.name,
                         email: res.email
                     }, true);
-                    client.emit('Login', res);
+                    console.log('Emit to Client', user);
+                    client.emit('UserData', res);
                 });
             }
             console.log(res);
@@ -32,7 +34,7 @@ module.exports = function (io, client, realm) {
 
 
     client.on('aJson', (data) => {
-        console.log(data); 
+        console.log(data);
     });
     // Show ra toàn bộ tên project mà user đã tham gia
     client.on('ShowAllProject', (user) => {
@@ -43,8 +45,8 @@ module.exports = function (io, client, realm) {
         console.log(projectsName);
     });
     // Trả về toàn bộ thông tin của user
-    client.on('GetUser',(userId)=>{
+    client.on('GetUser', (userId) => {
         let user = realm.objects('User').filtered('id==$0', userId)[0];
-        client.emit('UserData',user);
+        client.emit('UserData', user);
     });
 };

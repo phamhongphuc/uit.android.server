@@ -1,3 +1,3 @@
-module.exports = function (io, client, app) {
+module.exports = function (io, client, realm) {
 
 };
