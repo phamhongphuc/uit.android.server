@@ -23,10 +23,17 @@ module.exports = function (io, client, realm) {
                         name: res.name,
                         email: res.email
                     }, true);
-                    client.emit('Login',res);
+                    client.emit('Login', res);
                 });
             }
             console.log(res);
         });
+    });
+    client.on('ShowAllProject', (user) => {
+        let projectsName = [];
+        user.projects.forEach(project => {
+            projectsName.push(project.name);
+        });
+        console.log(projectsName);
     });
 };
