@@ -24,7 +24,7 @@ module.exports = function (io, client, realm) {
         let user = getUserById(userId);
         realm.write(() => {
             realm.create('Task', {
-                id: getNextTaskId(),
+                id: getNextProjectId(),
                 name: 'newProject',
                 creator: user,
                 description:'newDescription',
@@ -71,8 +71,8 @@ module.exports = function (io, client, realm) {
         client.emit('Return Project', project);
     });
 
-    function getNextTaskId() {
-        return realm.objects('Task').max('id') + 1;
+    function getNextProjectId() {
+        return realm.objects('Project').max('id') + 1;
     }
 
     function getProjectById(projectId) {
