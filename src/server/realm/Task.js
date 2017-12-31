@@ -8,7 +8,7 @@ module.exports = {
         deadline: 'date',
         description: 'string',
         assigned: 'User',
-        subcribers: 'User[]',
+        subscribers: 'User[]',
         status: 'int'
     }
 };

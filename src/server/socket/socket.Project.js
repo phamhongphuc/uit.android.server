@@ -38,5 +38,4 @@ module.exports = function (io, client, realm) {
         })[0];
         client.emit('ProjectData', project);
     });
-
 };

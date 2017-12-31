@@ -6,5 +6,19 @@ module.exports = function (io, client, realm) {
         })[0];
         client.emit('TaskData', task);
     });
-    //
+    //Tạo mới một task
+    client.on('CreateTask', (task) => {
+        realm.write(() => {
+            let newTask = realm.create('Task', {
+                id: task.id,
+                name: task.name,
+                createdate: task.createdate,
+                description: task.description,
+                assigned: task.assigned,
+                subscribers: task.subscribers,
+                status: task.status
+            }, true);
+            client.emit('Successful', newTask);
+        });
+    });
 };
