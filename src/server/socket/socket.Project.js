@@ -38,4 +38,28 @@ module.exports = function (io, client, realm) {
         })[0];
         client.emit('ProjectData', project);
     });
+    // Show ra toàn bộ tên Task mà Project có
+    client.on('ShowAllTasks', (project) => {
+        let tasksName = [];
+        project.tasks.forEach(task => {
+            tasksName.push(task.name);
+        });
+        console.log(tasksName);
+    });
+    // Show ra toàn bộ tên Channel mà Project có
+    client.on('ShowAllChannel', (project) => {
+        let channelsName = [];
+        project.channels.forEach(channel => {
+            channelsName.push(channel.name);
+        });
+        console.log(channelsName);
+    });
+    // Show ra toàn bộ tên Member mà Project có
+    client.on('ShowAllMember', (project) => {
+        let memberrsName = [];
+        project.member.forEach(member => {
+            memberrsName.push(member.name);
+        });
+        console.log(memberrsName);
+    }); 
 };
