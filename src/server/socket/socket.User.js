@@ -29,6 +29,11 @@ module.exports = function (io, client, realm) {
             console.log(res);
         });
     });
+
+
+    client.on('aJson', (data) => {
+        console.log(data); 
+    });
     // Show ra toàn bộ tên project mà user đã tham gia
     client.on('ShowAllProject', (user) => {
         let projectsName = [];

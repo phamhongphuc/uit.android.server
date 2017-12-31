@@ -5,15 +5,6 @@ import Project from './Project';
 import Task from './Task';
 import User from './User';
 
-
-// let userSchema = {
-//     name: 'user',
-//     properties: {
-//         fbid: 'string',
-//         name: 'string'
-//     }
-// };
-
 let appRealm = new Realm({
     path: 'src/database/app.realm',
     schema: [Channel, Message, Project, Task, User]
