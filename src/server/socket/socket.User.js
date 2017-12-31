@@ -29,11 +29,17 @@ module.exports = function (io, client, realm) {
             console.log(res);
         });
     });
+    // Show ra toàn bộ tên project mà user đã tham gia
     client.on('ShowAllProject', (user) => {
         let projectsName = [];
         user.projects.forEach(project => {
             projectsName.push(project.name);
         });
         console.log(projectsName);
+    });
+    // Trả về toàn bộ thông tin của user
+    client.on('GetUser',(userId)=>{
+        let user = realm.objects('User').filtered('id==$0', userId)[0];
+        client.emit('UserData',user);
     });
 };

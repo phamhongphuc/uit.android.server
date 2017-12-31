@@ -16,21 +16,26 @@ module.exports = function (io, client, realm) {
     });
     client.on('CreateProject', (project) => {
         realm.write(() => {
-            realm.create('Project', {
+            let newProject = realm.create('Project', {
                 id: project.id,
                 name: project.name,
-                task: project.task,
+                tasks: project.tasks,
                 member: project.member,
                 description: project.description,
-                tag: project.tags,
-                channel: project.channel,
+                tags: project.tags,
+                channels: project.channels,
                 createdate: project.createdate,
                 deadline: project.deadline
-            });
+            }, true);
+            client.emit('Successful', newProject);
         });
     });
-    client.on('ChooseProject', (projectName) => {
-        
+    // Thông tin của 1 project
+    client.on('ChooseProject', (projectId) => {
+        let project = realm.objects('Project').filtered('id==$0', {
+            projectId
+        })[0];
+        client.emit('ProjectData', project);
     });
 
 };
