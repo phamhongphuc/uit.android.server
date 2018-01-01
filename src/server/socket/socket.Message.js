@@ -1,9 +1,9 @@
 module.exports = function (io, client, realm) {
 
     // Trả về toàn bộ thông tin của Message
-    client.on('Get:Message(messageId)', (messageId) => {
+    client.on('Get:Message(messageId)', (messageId, callback) => {
         let message = getMessageById(messageId);
-        client.emit('Return Message', message);
+        callback(null, message);
     });
 
     function getMessageById(messageId) {

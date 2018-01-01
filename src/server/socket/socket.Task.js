@@ -1,16 +1,16 @@
 import moment from 'moment';
 module.exports = function (io, client, realm) {
     //Subscriber Join một task
-    client.on('Join:Task(userId)', (taskId, userId) => {
+    client.on('Join:Task(userId)', (taskId, userId, callback) => {
         realm.write(() => {
             let task = getTaskById(taskId);
             let user = getUserById(userId);
             task.subscribers.push(user);
-            client.emit('Join a Successful Task', taskId);
+            callback(null, taskId);
         });
     });
     //Xác nhận Task đã hoàn thành
-    client.on('Confirm:Task(taskId,userId)', (taskId, userId) => {
+    client.on('Confirm:Task(taskId,userId)', (taskId, userId, callback) => {
         let task = getTaskById(taskId);
         realm.write(() => {
             let isUpdate = task.subscribers.some(subscriber => {
@@ -20,18 +20,19 @@ module.exports = function (io, client, realm) {
                 }
                 return false;
             });
-            if(isUpdate){
+            if (isUpdate) {
                 task.lastupdate = new Date();
+                callback(null, taskId);
             }
+            else callback('Không tìm thấy Task');
         });
-        client.emit('Confirm Task: Completed', taskId);
     });
     //Edit một task
-    client.on('Edit:Task(task)', (task) => {
+    client.on('Edit:Task(task)', (task, callback) => {
         realm.write(() => {
             task.lastupdate = new Date();
             let newTask = realm.create('Task', task, true);
-            client.emit('Edit a Successful Task', newTask);
+            callback(null, newTask);
         });
     });
     //Create Task
@@ -52,19 +53,19 @@ module.exports = function (io, client, realm) {
         });
     });
     // Show ra toàn bộ Subscribers Id mà Task có
-    client.on('Get:Task.Subscribers(taskId)', (taskId) => {
+    client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
         let task = getTaskById(taskId);
         let subscribersId = [];
         task.subscribers.forEach(subscriber => {
             subscribersId.push(subscriber.id);
         });
         console.log(subscribersId);
-        client.emit('Return Subscribers ID', subscribersId);
+        callback(null, subscribersId);
     });
     // Trả về toàn bộ thông tin của Task
-    client.on('Get:Task(taskId)', (taskId) => {
+    client.on('Get:Task(taskId)', (taskId, callback) => {
         let task = getTaskById(taskId);
-        client.emit('Return Task', task);
+        callback(null, task);
     });
 
     function getNextTaskId() {

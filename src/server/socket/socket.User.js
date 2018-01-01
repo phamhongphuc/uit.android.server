@@ -27,29 +27,29 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('Get:User.Projects(userId)', (userId) => {
+    client.on('Get:User.Projects(userId)', (userId, callback) => {
         let user = getUserById(userId);
         let projectsID = [];
         user.projects.forEach(project => {
             projectsID.push(project.id);
         });
         console.log(projectsID);
-        client.emit('Return Project ID', projectsID);
+        callback(null, projectsID);
     });
 
     //Edit một User
-    client.on('Edit:User(user)', (user) => {
+    client.on('Edit:User(user)', (user, callback) => {
         realm.write(() => {
             user.lastupdate = new Date();
             let newUser = realm.create('User', user, true);
-            client.emit('Edit a Successful User', newUser);
+            callback(null, newUser);
         });
     });
 
     // Trả về toàn bộ thông tin của user
-    client.on('Get:User(userId)', (userId) => {
+    client.on('Get:User(userId)', (userId, callback) => {
         let user = getUserById(userId);
-        client.emit('Return User', user);
+        callback(null, user);
     });
 
     function getUserById(userId) {

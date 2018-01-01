@@ -1,9 +1,9 @@
 module.exports = function (io, client, realm) {
 
     // Trả về toàn bộ thông tin của Channel
-    client.on('Get:Channel(channelId)', (channelId) => {
+    client.on('Get:Channel(channelId)', (channelId, callback) => {
         let channel = getChannelById(channelId);
-        client.emit('Return Channel', channel);
+        callback(null, channel);
     });
 
     function getChannelById(channelId) {
