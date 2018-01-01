@@ -1,19 +1,19 @@
 import moment from 'moment';
 module.exports = function (app) {
-
     let realm = app.realm;
-    realm.write(() => {
-        let a = realm.objects('Task').max('id');
-        console.log(a);
-        realm.create('Task',{
-            id: a+1,
-            name: 'newTask',
-            createdate: moment().toDate(),
-            deadline: moment().add(1,'week').toDate(),
-            status: 0
-            // deadline: 
-        });
-    });
+    
+    // realm.write(() => {
+    //     let a = realm.objects('Task').max('id');
+    //     console.log(a);
+    //     realm.create('Task',{
+    //         id: a+1,
+    //         name: 'newTask',
+    //         createdate: moment().toDate(),
+    //         deadline: moment().add(1,'week').toDate(),
+    //         status: 0
+    //         // deadline: 
+    //     });
+    // });
     // let task = {
     //     id: 0,
     //     name: 'yeah'

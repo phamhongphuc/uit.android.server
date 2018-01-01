@@ -1,11 +1,8 @@
 import fb from 'fb';
 
 module.exports = function (io, client, realm) {
-    client.on('Get:User(accessToken)', (accessToken) => {
+    client.on('Get:User(accessToken, id)', (accessToken, id, callback) => {
         // data là chuỗi AccessToken
-        // Khi người dùng phía client đăng nhập xong, họ sẽ gửi lên máy chủ một accessToken
-        // Lưu cái đó vào trong cơ sở dữ liệu tạm thời
-        console.log(accessToken);
         fb.api('me', {
             fields: ['id', 'name', 'email'],
             access_token: accessToken
@@ -13,9 +10,7 @@ module.exports = function (io, client, realm) {
             // Kiểm tra tính đúng đắn res
             // Khi đã nhận được id, name, dùng 2 trường dữ liệu đó để lưu vào csdl
             if (!res || res.error) {
-                client.emit('LoginStatus', {
-                    error: 'Đăng nhập không thành công'
-                });
+                callback('accessToken không đúng hoặc máy chủ không thể kết nối tới Facebook');
             } else {
                 realm.write(() => {
                     // Vừa ghi đè, vừa lấy ra thông tin
@@ -25,11 +20,9 @@ module.exports = function (io, client, realm) {
                         email: res.email,
                         lastupdate: new Date()
                     }, true);
-                    console.log('Emit to Client', user);
-                    client.emit('UserData', res);
+                    callback(null, user);
                 });
             }
-            console.log(res);
         });
     });
 

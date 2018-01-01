@@ -28,7 +28,7 @@ module.exports = function (io, client, realm) {
                 id: getNextProjectId(),
                 name: 'newProject',
                 creator: user,
-                description:'newDescription',
+                description: 'newDescription',
                 createdate: moment().toDate(),
                 deadline: moment().add(1, 'week').toDate(),
                 lastupdate: new Date()
