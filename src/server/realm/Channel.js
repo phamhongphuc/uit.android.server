@@ -6,6 +6,7 @@ module.exports = {
         name:'string',
         assigned: 'User',
         members: 'User[]',
-        createdate: 'date'
+        createdate: 'date',
+        lastupdate: 'date'
     }
 };

@@ -11,6 +11,7 @@ module.exports = {
         tags:'string[]',
         channels:'Channel[]',
         createdate:'date',
-        deadline:'date'
+        deadline:'date',
+        lastupdate: 'date'
     }
 };

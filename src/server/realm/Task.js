@@ -10,6 +10,7 @@ module.exports = {
         assigned: 'User',
         subscribers: 'User[]',
         status: 'int',
-        project: 'Project'
+        project: 'Project',
+        lastupdate: 'date'
     }
 };

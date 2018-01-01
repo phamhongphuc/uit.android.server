@@ -8,6 +8,7 @@ module.exports = {
         gender: 'bool?',
         email: 'string',
         description: 'string?',
-        projects: 'Project[]'
+        projects: 'Project[]',
+        lastupdate: 'date'
     }
 };

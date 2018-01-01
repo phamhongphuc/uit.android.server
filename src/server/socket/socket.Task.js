@@ -13,19 +13,23 @@ module.exports = function (io, client, realm) {
     client.on('Confirm:Task(taskId,userId)', (taskId, userId) => {
         let task = getTaskById(taskId);
         realm.write(() => {
-            task.subscribers.some(subscriber => {
+            let isUpdate = task.subscribers.some(subscriber => {
                 if (subscriber.id == userId) {
                     subscriber.status = 2;
                     return true;
                 }
                 return false;
             });
+            if(isUpdate){
+                task.lastupdate = new Date();
+            }
         });
         client.emit('Confirm Task: Completed', taskId);
     });
     //Edit một task
     client.on('Edit:Task(task)', (task) => {
         realm.write(() => {
+            task.lastupdate = new Date();
             let newTask = realm.create('Task', task, true);
             client.emit('Edit a Successful Task', newTask);
         });
@@ -42,7 +46,8 @@ module.exports = function (io, client, realm) {
                 deadline: moment().add(1, 'week').toDate(),
                 status: 0,
                 assigned: user,
-                project: project
+                project: project,
+                lastupdate: new Date()
             });
         });
     });

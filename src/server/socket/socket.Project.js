@@ -15,6 +15,7 @@ module.exports = function (io, client, realm) {
     //Edit một Project
     client.on('Edit:Project(project)', (project) => {
         realm.write(() => {
+            project.lastupdate = new Date();
             let newProject = realm.create('Task', project, true);
             client.emit('Edit a Successful Task', newProject);
         });
@@ -29,7 +30,8 @@ module.exports = function (io, client, realm) {
                 creator: user,
                 description:'newDescription',
                 createdate: moment().toDate(),
-                deadline: moment().add(1, 'week').toDate()
+                deadline: moment().add(1, 'week').toDate(),
+                lastupdate: new Date()
             });
         });
     });
@@ -82,5 +84,4 @@ module.exports = function (io, client, realm) {
     function getUserById(userId) {
         return realm.objects('User').filtered('id == $0', userId)[0];
     }
-
 };

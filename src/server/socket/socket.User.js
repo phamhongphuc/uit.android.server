@@ -22,7 +22,8 @@ module.exports = function (io, client, realm) {
                     let user = realm.create('User', {
                         id: res.id,
                         name: res.name,
-                        email: res.email
+                        email: res.email,
+                        lastupdate: new Date()
                     }, true);
                     console.log('Emit to Client', user);
                     client.emit('UserData', res);
@@ -46,6 +47,7 @@ module.exports = function (io, client, realm) {
     //Edit một User
     client.on('Edit:User(user)', (user) => {
         realm.write(() => {
+            user.lastupdate = new Date();
             let newUser = realm.create('User', user, true);
             client.emit('Edit a Successful User', newUser);
         });
