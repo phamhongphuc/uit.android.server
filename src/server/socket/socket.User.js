@@ -2,47 +2,43 @@ import fb from 'fb';
 import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
-    client.on('Get:User(accessToken, id)', (accessToken, id, callback) => {
+    // realm.objects('User').addListener((puppies, changes) => {
+    //     // console.log('User: puppies:', puppies);
+    //     // console.log('User: changes:', changes);
+    //     changes.modifications.forEach((index) => {
+    //         let modifiedUser = puppies[index];
+    //         // console.log(modifiedUser.getJson());
+    //         console.log('có sự thay đổi của user', puppies);
+    //         io.emit('Update:User', modifiedUser.getJson());
+    //     });
+    // });
+
+    client.on('Get:User(accessToken)', (accessToken, callback) => {
         // data là chuỗi AccessToken
-        // console.log(accessToken, id, callback);
+        console.log(`\nGet:User(accessToken = ${accessToken.substring(0, 10)}...)`);
         fb.api('me', {
             fields: ['id', 'name', 'email'],
             access_token: accessToken
         }, (res) => {
-            // Kiểm tra tính đúng đắn res
-            // Khi đã nhận được id, name, dùng 2 trường dữ liệu đó để lưu vào csdl
             if (!res || res.error) {
                 callback('accessToken không đúng hoặc máy chủ không thể kết nối tới Facebook');
             } else {
                 realm.write(() => {
                     // Vừa ghi đè, vừa lấy ra thông tin
-                    let user = realm.create('User', {
-                        id: res.id,
-                        name: res.name,
-                        email: res.email,
-                        lastupdate: new Date()
-                    }, true);
-                    // user.projects = [];
+                    let user = User.getUserById(res.id);
+                    if (user == null || user.name !== res.name || user.email !== res.email) {
+                        user = realm.create('User', {
+                            id: res.id,
+                            name: res.name,
+                            email: res.email,
+                            lastupdate: new Date()
+                        }, true);
+                    }
+                    console.log(`  => return user: ${res.id} - ${res.name}`);
                     callback(null, user.getJson());
-                    console.log(user);
                 });
             }
         });
-    });
-
-    // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('Get:User.Projects(userId)', (userId, callback) => {
-        let user = User.getUserById(userId);
-        if (!user) {
-            callback('User không tồn tại');
-        } else {
-            let projectsID = [];
-            user.projects.forEach(project => {
-                projectsID.push(project.id);
-            });
-            console.log(projectsID);
-            callback(null, projectsID);
-        }
     });
 
     //Edit một User
@@ -63,6 +59,6 @@ module.exports = function (io, client, realm) {
         let user = User.getUserById(userId);
         if (!user) {
             callback('Không tìm thấy User');
-        } else callback(null, user);
+        } else callback(null, user.getJson());
     });
 };

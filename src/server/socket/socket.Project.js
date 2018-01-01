@@ -1,20 +1,12 @@
 import moment from 'moment';
 import Project from '../realm/Project';
-import User from '../realm/Project';
+import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
-    // client.on('ProjectExist', (userId) => {
-    //     let user = User.getUserById(userId);
-    //     if (!user) {
-    //         console.log('User không tồn tại!');
-    //     } else if (!user.projects.length) {
-    //         console.log('Không tồn tại project');
-    //         client.emit('Notification', 'Project is Empty. Create a new project');
-    //     } else {
-    //         console.log('Đã có project');
-    //         client.emit('Notification', 'Choose project');
-    //     }
+    // realm.objects('Project').addListener((puppies, changes) => {
+    //     // console.log('Project', puppies, changes);
     // });
+
     //Edit một Project
     client.on('Edit:Project(project)', (project, callback) => {
         if (!project) {
@@ -27,14 +19,16 @@ module.exports = function (io, client, realm) {
             });
         }
     });
+
     //Create Project
     client.on('Create:Project(userId)', (userId, callback) => {
+        console.log(`\nCreate:Project(userId = ${userId})`);
         let user = User.getUserById(userId);
         if (!user) {
             callback('User không tồn tại');
         } else {
             realm.write(() => {
-                realm.create('Task', {
+                let project = realm.create('Project', {
                     id: Project.getNextProjectId(),
                     name: 'newProject',
                     creator: user,
@@ -43,6 +37,12 @@ module.exports = function (io, client, realm) {
                     deadline: moment().add(1, 'week').toDate(),
                     lastupdate: new Date()
                 });
+                project.creator = user;
+                project.members.push(user);
+                user.lastupdate = new Date();
+                user.projects.push(project);
+                console.log(`  => return project.id = ${project.id}`);
+                callback(null, project.getJson());
             });
         }
     });
@@ -85,16 +85,37 @@ module.exports = function (io, client, realm) {
             project.member.forEach(member => {
                 membersId.push(member.id);
             });
-            console.log(membersId);
+            // console.log(membersId);
             callback(null, membersId);
         }
     });
 
     // Trả về toàn bộ thông tin của Project
-    client.on('Get:Projec(projectId)', (projectId, callback) => {
+    client.on('Get:Project(projectId)', (projectId, callback) => {
+        console.log(`\nGet:Project(projectId = ${projectId})`);
         let project = Project.getProjectById(projectId);
         if (!project) {
             callback('Không tìm thấy Project');
-        } else callback(null, project);
+        } else {
+            console.log(`  => project.id = ${project.id}`);
+            callback(null, project.getJson());
+        }
+    });
+
+    // Show ra toàn bộ Project Id mà user đã tham gia
+    client.on('Get:Projects(userId)', (userId, callback) => {
+        console.log(`\nGet:Projects(userId = ${userId})`);
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('User không tồn tại');
+        } else {
+            let projectsID = [];
+            user.projects.forEach(project => {
+                projectsID.push(project.id);
+            });
+            // console.log(projectsID);
+            console.log(`  => return projectsId[].length = ${projectsID.length}`);
+            callback(null, projectsID);
+        }
     });
 };
