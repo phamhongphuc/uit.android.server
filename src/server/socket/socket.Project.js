@@ -70,7 +70,9 @@ module.exports = function (io, client, realm) {
     // Trả về toàn bộ thông tin của Project
     client.on('Get:Projec(projectId)', (projectId, callback) => {
         let project = getProjectById(projectId);
-        callback(null, project);
+        if (project == null) {
+            callback('Không tìm thấy Project');
+        } else callback(null, project);
     });
 
     function getNextProjectId() {

@@ -49,7 +49,9 @@ module.exports = function (io, client, realm) {
     // Trả về toàn bộ thông tin của user
     client.on('Get:User(userId)', (userId, callback) => {
         let user = getUserById(userId);
-        callback(null, user);
+        if (user == null) {
+            callback('Không tìm thấy User');
+        } else callback(null, user);
     });
 
     function getUserById(userId) {

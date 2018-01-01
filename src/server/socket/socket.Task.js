@@ -23,8 +23,7 @@ module.exports = function (io, client, realm) {
             if (isUpdate) {
                 task.lastupdate = new Date();
                 callback(null, taskId);
-            }
-            else callback('Không tìm thấy Task');
+            } else callback('Không tìm thấy Task');
         });
     });
     //Edit một task
@@ -65,7 +64,9 @@ module.exports = function (io, client, realm) {
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback) => {
         let task = getTaskById(taskId);
-        callback(null, task);
+        if (task == null) {
+            callback('Không tìm thấy Task');
+        } else callback(null, task);
     });
 
     function getNextTaskId() {
