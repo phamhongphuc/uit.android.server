@@ -1,4 +1,4 @@
-export default class Task {
+class Task {
     static setRealm(realm) {
         this.realm = realm;
     }
@@ -25,3 +25,5 @@ Task.schema = {
         lastupdate: 'date'
     }
 };
+
+export default Task;

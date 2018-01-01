@@ -23,7 +23,7 @@ module.exports = function (io, client, realm) {
                         lastupdate: new Date()
                     }, true);
                     // user.projects = [];
-                    callback(null, user);
+                    callback(null, user.getJson());
                     console.log(user);
                 });
             }

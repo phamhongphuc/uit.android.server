@@ -1,4 +1,4 @@
-export default class Project {
+class Project {
     static setRealm(realm) {
         this.realm = realm;
     }
@@ -27,3 +27,5 @@ Project.schema = {
         lastupdate: 'date'
     }
 };
+
+export default Project;

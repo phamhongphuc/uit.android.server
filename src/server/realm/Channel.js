@@ -1,4 +1,4 @@
-export default class Channel {
+class Channel {
     static setRealm(realm) {
         this.realm = realm;
     }
@@ -18,3 +18,5 @@ Channel.schema = {
         lastupdate: 'date'
     }
 };
+
+export default Channel;

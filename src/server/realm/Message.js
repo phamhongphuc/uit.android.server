@@ -1,4 +1,4 @@
-export default class Message {
+class Message {
     static setRealm(realm) {
         this.realm = realm;
     }
@@ -17,3 +17,5 @@ Message.schema = {
         content: 'string'
     }
 };
+
+export default Message;
