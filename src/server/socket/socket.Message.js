@@ -1,15 +1,12 @@
+import Message from '../realm/Message';
 module.exports = function (io, client, realm) {
 
     // Trả về toàn bộ thông tin của Message
     client.on('Get:Message(messageId)', (messageId, callback) => {
-        let message = getMessageById(messageId);
+        let message = Message.getMessageById(messageId);
         if (message == null) {
             callback('Không tìm thấy Message');
         } else callback(null, message);
     });
-
-    function getMessageById(messageId) {
-        return realm.objects('Message').filtered('id == $0', messageId)[0];
-    }
 
 };

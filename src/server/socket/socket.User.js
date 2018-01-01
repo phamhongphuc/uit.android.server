@@ -1,8 +1,10 @@
 import fb from 'fb';
+import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
     client.on('Get:User(accessToken, id)', (accessToken, id, callback) => {
         // data là chuỗi AccessToken
+        // console.log(accessToken, id, callback);
         fb.api('me', {
             fields: ['id', 'name', 'email'],
             access_token: accessToken
@@ -20,7 +22,9 @@ module.exports = function (io, client, realm) {
                         email: res.email,
                         lastupdate: new Date()
                     }, true);
+                    // user.projects = [];
                     callback(null, user);
+                    console.log(user);
                 });
             }
         });
@@ -28,7 +32,7 @@ module.exports = function (io, client, realm) {
 
     // Show ra toàn bộ Project Id mà user đã tham gia
     client.on('Get:User.Projects(userId)', (userId, callback) => {
-        let user = getUserById(userId);
+        let user = User.getUserById(userId);
         if (!user) {
             callback('User không tồn tại');
         } else {
@@ -56,13 +60,9 @@ module.exports = function (io, client, realm) {
 
     // Trả về toàn bộ thông tin của user
     client.on('Get:User(userId)', (userId, callback) => {
-        let user = getUserById(userId);
+        let user = User.getUserById(userId);
         if (!user) {
             callback('Không tìm thấy User');
         } else callback(null, user);
     });
-
-    function getUserById(userId) {
-        return realm.objects('User').filtered('id == $0', userId)[0];
-    }
 };

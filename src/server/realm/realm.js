@@ -5,11 +5,16 @@ import Project from './Project';
 import Task from './Task';
 import User from './User';
 
-let appRealm = new Realm({
+let schemas = [Channel, Message, Project, Task, User];
+let realm = new Realm({
     path: 'src/database/app.realm',
-    schema: [Channel, Message, Project, Task, User]
+    schema: schemas
+});
+
+schemas.forEach(schema => {
+    schema.setRealm(realm);
 });
 
 export default function (app) {
-    app.realm = appRealm;
+    app.realm = realm;
 }

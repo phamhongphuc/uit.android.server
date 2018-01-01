@@ -1,9 +1,13 @@
 import moment from 'moment';
+import User from '../realm/User';
+import Task from '../realm/Task';
+import Project from '../realm/Project';
+
 module.exports = function (io, client, realm) {
     //Subscriber Join một task
     client.on('Join:Task(userId)', (taskId, userId, callback) => {
-        let task = getTaskById(taskId);
-        let user = getUserById(userId);
+        let task = Task.getTaskById(taskId);
+        let user = User.getUserById(userId);
         if (!task || !user) {
             callback('Task hoặc User không tồn tại');
         } else {
@@ -15,8 +19,8 @@ module.exports = function (io, client, realm) {
     });
     //Xác nhận Task đã hoàn thành
     client.on('Confirm:Task(taskId, userId)', (taskId, userId, callback) => {
-        let task = getTaskById(taskId);
-        let user = getUserById(userId);
+        let task = Task.getTaskById(taskId);
+        let user = User.getUserById(userId);
         if (!task || !user) {
             callback('Task hoặc User không tồn tại');
         } else {
@@ -49,14 +53,14 @@ module.exports = function (io, client, realm) {
     });
     //Create Task
     client.on('Create:Task(userId,projectId)', (userId, projectId, callback) => {
-        let user = getUserById(userId);
-        let project = getProjectById(projectId);
+        let user = User.getUserById(userId);
+        let project = Project.getProjectById(projectId);
         if (!user || !project) {
             callback('User hoặc Project không tồn tại');
         } else {
             realm.write(() => {
                 realm.create('Task', {
-                    id: getNextTaskId(),
+                    id: Task.getNextTaskId(),
                     name: 'newTask',
                     createdate: moment().toDate(),
                     deadline: moment().add(1, 'week').toDate(),
@@ -70,7 +74,7 @@ module.exports = function (io, client, realm) {
     });
     // Show ra toàn bộ Subscribers Id mà Task có
     client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
-        let task = getTaskById(taskId);
+        let task = Task.getTaskById(taskId);
         if (!task) {
             callback('Task không tồn tại');
         } else {
@@ -84,25 +88,9 @@ module.exports = function (io, client, realm) {
     });
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback) => {
-        let task = getTaskById(taskId);
+        let task = Task.getTaskById(taskId);
         if (!task) {
             callback('Không tìm thấy Task');
         } else callback(null, task);
     });
-
-    function getNextTaskId() {
-        return realm.objects('Task').max('id') + 1;
-    }
-
-    function getTaskById(taskId) {
-        return realm.objects('Task').filtered('id == $0', taskId)[0];
-    }
-
-    function getUserById(userId) {
-        return realm.objects('User').filtered('id == $0', userId)[0];
-    }
-
-    function getProjectById(projectId) {
-        return realm.objects('Project').filtered('id == $0', projectId)[0];
-    }
 };
