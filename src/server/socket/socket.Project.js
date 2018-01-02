@@ -30,9 +30,9 @@ module.exports = function (io, client, realm) {
             realm.write(() => {
                 let project = realm.create('Project', {
                     id: Project.getNextProjectId(),
-                    name: 'newProject',
+                    name: 'Dự án mới',
                     creator: user,
-                    description: 'newDescription',
+                    description: 'Điền chú thích của dự án vào đây',
                     createdate: moment().toDate(),
                     deadline: moment().add(1, 'week').toDate(),
                     lastupdate: new Date()
@@ -40,8 +40,7 @@ module.exports = function (io, client, realm) {
                 project.creator = user;
                 project.members.push(user);
                 user.lastupdate = new Date();
-                user.projects.push(project);
-                console.log(`  => return project.id = ${project.id}`);
+                console.log(`  => return project: project.id = ${project.id}`);
                 callback(null, project.getJson());
             });
         }

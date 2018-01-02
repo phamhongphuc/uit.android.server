@@ -7,5 +7,4 @@ module.exports = function (io, client, realm) {
             callback('Không tìm thấy Message');
         } else callback(null, message);
     });
-
 };
