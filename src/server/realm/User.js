@@ -34,11 +34,6 @@ User.schema = {
         gender: 'bool?',
         email: 'string',
         description: 'string?',
-        projects: {
-            type: 'linkingObjects',
-            objectType: 'Project',
-            property: 'members'
-        },
         lastupdate: 'date'
     }
 };

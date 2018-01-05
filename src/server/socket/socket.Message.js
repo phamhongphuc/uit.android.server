@@ -25,7 +25,7 @@ module.exports = function (io, client, realm) {
                     content: content
                 });
                 message.sender = user;
-                message.idchannel = channel;
+                message.channel = channel;
             });
         }
     });

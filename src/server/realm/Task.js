@@ -15,13 +15,13 @@ Task.schema = {
     properties: {
         id: 'int',
         name: 'string',
-        createdate: 'date',
-        deadline: 'date',
         description: 'string?',
         assigned: 'User',
         subscribers: 'User[]',
         status: 'int',
         project: 'Project',
+        createdate: 'date',
+        deadline: 'date',
         lastupdate: 'date'
     }
 };

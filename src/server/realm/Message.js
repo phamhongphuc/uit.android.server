@@ -17,7 +17,7 @@ Message.schema = {
         id: 'int',
         time: 'date',
         sender: 'User',
-        idchannel: 'Channel',
+        channel: 'Channel',
         content: 'string'
     }
 };

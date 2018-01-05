@@ -41,12 +41,10 @@ Project.schema = {
     properties: {
         id: 'int',
         name: 'string',
-        tasks: 'Task[]',
         creator: 'User',
         members: 'User[]',
         description: 'string?',
         tags: 'string[]',
-        channels: 'Channel[]',
         createdate: 'date',
         deadline: 'date',
         lastupdate: 'date'

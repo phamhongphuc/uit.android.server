@@ -6,7 +6,7 @@ birthdate       date?
 gender          bool?
 email           string
 description     string?
-projects        Project[]   FK - Project.id
+<!-- projects        Project[]   FK - Project.id -->
 lastupdate      date
 
 Task
@@ -26,12 +26,12 @@ Project
 ---
 id          PK  string 
 name            string
-tasks           Task[]      FK - Task.id
+<!-- tasks           Task[]      FK - Task.id -->
 creator         User        FK - User.id
-member          User[]      FK - User.id
+members         User[]      FK - User.id
 description     string?
 tags            string[]
-channels        Channel[]   FK - Channel.id
+<!-- channels        Channel[]   FK - Channel.id -->
 createdate      date
 deadline        date
 lastupdate      date
@@ -41,7 +41,7 @@ Message
 id         PK    int
 time             date
 sender           User       FK - User.id
-idchannel        Channel    FK - Channel.id
+channel          Channel    FK - Channel.id
 content          string
 
 Channel
@@ -49,7 +49,8 @@ Channel
 id         PK    string
 name             string
 assigned         User       FK - User.id
-members          User[]     
+members          User[]     FK - User.id
+project          Project    FK - Project.id     
 createdate       date
 lastupdate       date
 
