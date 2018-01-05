@@ -45,8 +45,20 @@ module.exports = function (io, client, realm) {
             });
         }
     });
-
-    // Show ra toàn bộ tên Task mà Project có
+    //Thêm một thành viên vào Channel
+    client.on('Add:Project.Member(projectId, userId)', (projectId, userId, callback) => {
+        let project = Project.getProjectById(projectId);
+        let user = User.getUserById(userId);
+        if (!project || !user) {
+            callback('Project hoặc User không tồn tại');
+        } else {
+            realm.write(() => {
+                project.members.push(user);
+                callback(null, projectId);
+            });
+        }
+    });
+    // Show ra toàn bộ Task Id mà Project có
     client.on('Get:Project.Tasks(projectId)', (projectId, callback) => {
         let project = Project.getProjectById(projectId);
         if (!project) {

@@ -5,7 +5,7 @@ import Project from '../realm/Project';
 
 module.exports = function (io, client, realm) {
     //Subscriber Join một task
-    client.on('Join:Task(userId)', (taskId, userId, callback) => {
+    client.on('Join:Task(taskId, userId)', (taskId, userId, callback) => {
         let task = Task.getTaskById(taskId);
         let user = User.getUserById(userId);
         if (!task || !user) {
