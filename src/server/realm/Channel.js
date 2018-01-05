@@ -3,7 +3,7 @@ class Channel {
         this.realm = realm;
     }
     static getChannelById(channelId) {
-        return this.realm.objects('Channel').filtered('id == $0', channelId)[0];
+        return this.realm.objects('Channel').find(object => object.id == channelId);
     }
     static getNextChannelId() {
         let channels = this.realm.objects('Channel');
@@ -19,6 +19,11 @@ Channel.schema = {
         assigned: 'User',
         members: 'User[]',
         project: 'Project',
+        messages: {
+            type: 'linkingObjects',
+            objectType: 'Message',
+            property: 'channel'
+        },
         createdate: 'date',
         lastupdate: 'date'
     }

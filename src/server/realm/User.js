@@ -3,7 +3,7 @@ class User {
         this.realm = realm;
     }
     static getUserById(userId) {
-        return this.realm.objects('User').filtered('id == $0', userId)[0];
+        return this.realm.objects('Channel').find(object => object.id == userId);
     }
     getJson() {
         let properties = [

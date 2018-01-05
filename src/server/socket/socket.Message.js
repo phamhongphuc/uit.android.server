@@ -27,11 +27,25 @@ module.exports = function (io, client, realm) {
                 message.sender = user;
                 message.channel = channel;
             });
+            io.emit('New:Message.Return')
         }
     });
     //list Mess
-    client.on('List.Mess(channelId'), (channelId, callback) => {
+    client.on('Load.Message.First(channelId, )', (channelId, callback) => {
         let channel = Channel.getChannelById(channelId);
-
-    };
+        let message = realm.object('Message');
+        if (!channel) {
+            callback('Không tìm thấy Message');
+        } else {
+            channel.messages;
+            let messagesId = [];
+            if (message.length == 0) {
+                message.channel.forEach(message => {
+                    if (message.channel == channelId) {
+                        messagesId.push(message.id);
+                    }
+                });
+            }
+        }
+    });
 };

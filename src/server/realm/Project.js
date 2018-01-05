@@ -8,7 +8,7 @@ class Project {
         return projects.length == 0 ? 1 : projects.max('id') + 1;
     }
     static getProjectById(projectId) {
-        return this.realm.objects('Project').filtered('id == $0', projectId)[0];
+        return this.realm.objects('Channel').find(object => object.id == projectId);
     }
     getJson() {
         let properties = [

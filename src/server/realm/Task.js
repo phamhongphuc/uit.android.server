@@ -3,7 +3,7 @@ class Task {
         this.realm = realm;
     }
     static getTaskById(taskId) {
-        return this.realm.objects('Task').filtered('id == $0', taskId)[0];
+        return this.realm.objects('Channel').find(object => object.id == taskId);
     }
     static getNextTaskId() {
         return this.realm.objects('Task').max('id') + 1;
