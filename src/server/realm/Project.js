@@ -44,6 +44,16 @@ Project.schema = {
         creator: 'User',
         members: 'User[]',
         description: 'string?',
+        channels: {
+            type: 'linkingObjects',
+            objectType: 'Channel',
+            property: 'project'
+        },
+        tasks: {
+            type: 'linkingObjects',
+            objectType: 'Task',
+            property: 'project'
+        },
         tags: 'string[]',
         createdate: 'date',
         deadline: 'date',

@@ -27,24 +27,34 @@ module.exports = function (io, client, realm) {
                 message.sender = user;
                 message.channel = channel;
             });
-            io.emit('New:Message.Return')
+            io.emit('New:Message.Return');
         }
     });
-    //list Mess
-    client.on('Load.Message.First(channelId, )', (channelId, callback) => {
+    //tải message lên khi client: size = 0
+    client.on('Load.Message.Empty(channelId, number)', (channelId, number, callback) => {
         let channel = Channel.getChannelById(channelId);
-        let message = realm.object('Message');
         if (!channel) {
-            callback('Không tìm thấy Message');
+            callback('Không tìm thấy channel');
         } else {
-            channel.messages;
-            let messagesId = [];
-            if (message.length == 0) {
-                message.channel.forEach(message => {
-                    if (message.channel == channelId) {
-                        messagesId.push(message.id);
-                    }
-                });
+            let messageList = channel.messages;
+            let mList = messageList.sorted('time', true).slice(0, number);
+            console.log(mList);
+        }
+    });
+    // tải message từ messageId trở xuống
+    client.on('Load:Message.MessId(channelId, messageId, number)', (channelId, messageId, number, callback) => {
+        let channel = Channel.getChannelById(channelId);
+        if (!channel) {
+            callback('Không tìn thấy channel');
+        } else {
+            let message = channel.messages.find(o => o.id == messageId);
+            if (!message) {
+                callback('Không tìm thấy MessageId trong Channel này');
+            } else {
+                let messages = channel.messages.sorted('time', true);
+                let messageIndex = messages.findIndex(o => o.id == messageId);
+                let messageList = messages.slice(0, messageIndex + 1);
+                console.log(messageList);
             }
         }
     });

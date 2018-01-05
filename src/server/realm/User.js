@@ -33,6 +33,16 @@ User.schema = {
         birthdate: 'date?',
         gender: 'bool?',
         email: 'string',
+        projects: {
+            type: 'linkingObjects',
+            objectType: 'Project',
+            property: 'members'
+        },
+        projectsOwn: {
+            type: 'linkingObjects',
+            objectType: 'Project',
+            property: 'creator'
+        },
         description: 'string?',
         lastupdate: 'date'
     }
