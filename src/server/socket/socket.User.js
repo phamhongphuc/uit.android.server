@@ -35,7 +35,17 @@ module.exports = function (io, client, realm) {
                         }, true);
                     }
                     console.log(`  => return user: ${res.id} - ${res.name}`);
-                    callback(null, user.getJson());
+
+                    let userJson;
+                    userJson = user.getJson();
+                    userJson.projects = user.projects.map(project => {
+                        let projectJson;
+                        projectJson = project.getJson();
+                        projectJson.members = project.members.map(member => member.getJson());
+                        return projectJson;
+                    });
+                    console.log(userJson);
+                    callback(null, userJson);
                 });
             }
         });

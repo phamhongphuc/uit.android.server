@@ -24,7 +24,10 @@ class Project {
             map[obj] = this[obj];
             return map;
         }, {});
-        json.creatorId = this.creator.id;
+        json.members = this.members.map(user => user.getJson());
+        if (this.creator != null) {
+            json.creatorId = this.creator.id;
+        }
         return json;
     }
 }
