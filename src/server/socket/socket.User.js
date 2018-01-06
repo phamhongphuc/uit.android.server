@@ -54,6 +54,54 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    // Trả về toàn bộ Task mà user đó tham gia
+    client.on('Get:User.tasks(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.tasks.map(task => task.id));
+    });
+
+    // Trả về toàn bộ Task mà user đó Tạo
+    client.on('Get:User.tasksOwn(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.tasksOwn.map(task => task.id));
+    });
+
+    // Trả về toàn bộ Project mà user đó tham gia
+    client.on('Get:User.projects(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.projects.map(project => project.id));
+    });
+
+    // Trả về toàn bộ Project mà user đó Tạo
+    client.on('Get:User.projectsOwn(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.projectsOwn.map(project => project.id));
+    });
+
+    // Trả về toàn bộ Channel mà user đó tham gia
+    client.on('Get:User.channels(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.channels.map(channel => channel.id));
+    });
+
+    // Trả về toàn bộ Channel mà user đó Tạo
+    client.on('Get:User.channelsOwn(userId)', (userId, callback = () => {}) => {
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('Không tìm thấy User');
+        } else callback(null, user.channelsOwn.map(channel => channel.id));
+    });
+
     // Trả về toàn bộ thông tin của user
     client.on('Get:User(userId)', (userId, callback = () => {}) => {
         let user = User.getUserById(userId);
