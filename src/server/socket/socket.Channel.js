@@ -5,7 +5,7 @@ import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
     //Create Channel
-    client.on('Create:Channel(projectId, userId)', (projectId, userId, callback) => {
+    client.on('Create:Channel(projectId, userId)', (projectId, userId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!user || !project) {
@@ -26,7 +26,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Thêm một thành viên vào Channel
-    client.on('Add:Channel.Members(channelId, userId)', (channelId, userId, callback) => {
+    client.on('Add:Channel.Members(channelId, userId)', (channelId, userId, callback = () => {}) => {
         let channel = Channel.getChannelById(channelId);
         let user = User.getUserById(userId);
         if (!channel || !user) {
@@ -45,7 +45,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Edit một Channel
-    client.on('Edit:Channel(channel, userId)', (channel, userId, callback) => {
+    client.on('Edit:Channel(channel, userId)', (channel, userId, callback = () => {}) => {
         if (!channel && !userId) {
             callback('Channel hoặc User không tồn tại');
         } else {
@@ -64,7 +64,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Delete Task
-    client.on('Delete:Channel(channelId, userId)', (channelId, userId, callback) => {
+    client.on('Delete:Channel(channelId, userId)', (channelId, userId, callback = () => {}) => {
         if (!channelId || !userId) {
             callback('Channel hoặc User không tồn tại');
         } else {
@@ -82,7 +82,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của Channel
-    client.on('Get:Channel(channelId)', (channelId, callback) => {
+    client.on('Get:Channel(channelId)', (channelId, callback = () => {}) => {
         let channel = Channel.getChannelById(channelId);
         if (channel == null) {
             callback('Không tìm thấy Channel');

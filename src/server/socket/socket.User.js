@@ -13,7 +13,7 @@ module.exports = function (io, client, realm) {
     //     });
     // });
 
-    client.on('Get:User(accessToken)', (accessToken, callback) => {
+    client.on('Get:User(accessToken)', (accessToken, callback = () => {}) => {
         // data là chuỗi AccessToken
         console.log(`\nGet:User(accessToken = ${accessToken.substring(0, 10)}...)`);
         fb.api('me', {
@@ -42,7 +42,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Edit một User
-    client.on('Edit:User(user)', (user, callback) => {
+    client.on('Edit:User(user)', (user, callback = () => {}) => {
         if (!user) {
             callback('User không tồn tại');
         } else {
@@ -55,7 +55,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của user
-    client.on('Get:User(userId)', (userId, callback) => {
+    client.on('Get:User(userId)', (userId, callback = () => {}) => {
         let user = User.getUserById(userId);
         if (!user) {
             callback('Không tìm thấy User');

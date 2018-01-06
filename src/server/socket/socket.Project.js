@@ -8,7 +8,7 @@ module.exports = function (io, client, realm) {
     // });
 
     //Create Project
-    client.on('Create:Project(userId)', (userId, callback) => {
+    client.on('Create:Project(userId)', (userId, callback = () => {}) => {
         console.log(`\nCreate:Project(userId = ${userId})`);
         let user = User.getUserById(userId);
         if (!user) {
@@ -34,7 +34,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Thêm một thành viên vào Project
-    client.on('Add:Project.Member(projectId, userId)', (projectId, userId, callback) => {
+    client.on('Add:Project.Member(projectId, userId)', (projectId, userId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!project || !user) {
@@ -53,7 +53,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Edit một Project
-    client.on('Edit:Project(project, userId)', (project, userId, callback) => {
+    client.on('Edit:Project(project, userId)', (project, userId, callback = () => {}) => {
         if (!project || !userId) {
             callback('Project hoặc User không tồn tại');
         } else {
@@ -72,7 +72,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Delete Project
-    client.on('Delete:Project(projectId, userId)', (projectId, userId, callback) => {
+    client.on('Delete:Project(projectId, userId)', (projectId, userId, callback = () => {}) => {
         if (!projectId || !userId) {
             callback('Project hoặc User không tồn tại');
         } else {
@@ -90,7 +90,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Task Id mà Project có
-    client.on('Get:Project.Tasks(projectId)', (projectId, callback) => {
+    client.on('Get:Project.Tasks(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
             callback('Project không tồn tại');
@@ -105,7 +105,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Channel Id mà Project có
-    client.on('Get:Project.Channels(projectId)', (projectId, callback) => {
+    client.on('Get:Project.Channels(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
             callback('Project không tồn tại');
@@ -120,7 +120,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Member Id mà Project có
-    client.on('Get:Project.Members(projectId)', (projectId, callback) => {
+    client.on('Get:Project.Members(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
             callback('Project không tồn tại');
@@ -135,7 +135,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của Project
-    client.on('Get:Project(projectId)', (projectId, callback) => {
+    client.on('Get:Project(projectId)', (projectId, callback = () => {}) => {
         console.log(`\nGet:Project(projectId = ${projectId})`);
         let project = Project.getProjectById(projectId);
         if (!project) {

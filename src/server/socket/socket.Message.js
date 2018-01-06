@@ -4,7 +4,7 @@ import Channel from '../realm/Channel';
 
 module.exports = function (io, client, realm) {
     //New Message
-    client.on('New:Message(channelId, userId, content)', (channelId, userId, content, callback) => {
+    client.on('New:Message(channelId, userId, content)', (channelId, userId, content, callback = () => {}) => {
         let user = User.getUserById(userId);
         let channel = Channel.getChannelById(channelId);
         if (!user || !channel) {
@@ -24,7 +24,7 @@ module.exports = function (io, client, realm) {
     });
 
     //tải message lên khi client: size = 0
-    client.on('Load.Message.Empty(channelId, number)', (channelId, number, callback) => {
+    client.on('Load.Message.Empty(channelId, number)', (channelId, number, callback = () => {}) => {
         let channel = Channel.getChannelById(channelId);
         if (!channel) {
             callback('Không tìm thấy channel');
@@ -36,7 +36,7 @@ module.exports = function (io, client, realm) {
     });
 
     // tải message từ messageId trở xuống
-    client.on('Load:Message.MessId(channelId, messageId, number)', (channelId, messageId, number, callback) => {
+    client.on('Load:Message.MessId(channelId, messageId, number)', (channelId, messageId, number, callback = () => {}) => {
         let channel = Channel.getChannelById(channelId);
         if (!channel) {
             callback('Không tìn thấy channel');
@@ -54,7 +54,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của Message
-    client.on('Get:Message(messageId)', (messageId, callback) => {
+    client.on('Get:Message(messageId)', (messageId, callback = () => {}) => {
         let message = Message.getMessageById(messageId);
         if (message == null) {
             callback('Không tìm thấy Message');

@@ -8,7 +8,7 @@ import {
 
 module.exports = function (io, client, realm) {
     //Create Task
-    client.on('Create:Task(projectId, userId)', (projectId, userId, callback) => {
+    client.on('Create:Task(projectId, userId)', (projectId, userId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!user || !project) {
@@ -30,7 +30,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Subscriber Join một task
-    client.on('Join:Task(taskId, userId)', (taskId, userId, callback) => {
+    client.on('Join:Task(taskId, userId)', (taskId, userId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
         let user = User.getUserById(userId);
         if (!task || !user) {
@@ -49,7 +49,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Edit một task
-    client.on('Edit:Task(task, userId)', (task, userId, callback) => {
+    client.on('Edit:Task(task, userId)', (task, userId, callback = () => {}) => {
         if (!task && !userId) {
             callback('Task hoặc User không tồn tại');
         } else {
@@ -68,7 +68,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Xác nhận Task đã hoàn thành
-    client.on('Confirm:Task(taskId, userId)', (taskId, userId, callback) => {
+    client.on('Confirm:Task(taskId, userId)', (taskId, userId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
         let user = User.getUserById(userId);
         if (!task || !user) {
@@ -96,7 +96,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Delete Task
-    client.on('Delete:Task(taskId, userId)', (taskId, userId, callback) => {
+    client.on('Delete:Task(taskId, userId)', (taskId, userId, callback = () => {}) => {
         if (!taskId || !userId) {
             callback('Task hoặc User không tồn tại');
         } else {
@@ -114,7 +114,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Subscribers Id mà Task có
-    client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
+    client.on('Get:Task.Subscribers(taskId)', (taskId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
         if (!task) {
             callback('Task không tồn tại');
@@ -129,7 +129,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Trả về toàn bộ thông tin của Task
-    client.on('Get:Task(taskId)', (taskId, callback) => {
+    client.on('Get:Task(taskId)', (taskId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
         if (!task) {
             callback('Không tìm thấy Task');
