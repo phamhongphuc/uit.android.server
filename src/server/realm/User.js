@@ -9,18 +9,18 @@ class User {
         let properties = [
             'id',
             'name',
+            'description',
+
             'birthdate',
             'gender',
             'email',
-            'description',
-            // 'projects',
+
             'lastupdate'
         ];
         let json = properties.reduce((map, obj) => {
             map[obj] = this[obj];
             return map;
         }, {});
-        // json.projects = this.projects.map(project => project.id);
         return json;
     }
 }
@@ -30,9 +30,13 @@ User.schema = {
     properties: {
         id: 'string',
         name: 'string',
+        description: 'string?',
+
         birthdate: 'date?',
         gender: 'bool?',
         email: 'string',
+
+        lastupdate: 'date',
         projects: {
             type: 'linkingObjects',
             objectType: 'Project',
@@ -63,8 +67,6 @@ User.schema = {
             objectType: 'Channel',
             property: 'assigned'
         },
-        description: 'string?',
-        lastupdate: 'date'
     }
 };
 
