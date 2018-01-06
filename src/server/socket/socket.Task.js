@@ -15,7 +15,7 @@ module.exports = function (io, client, realm) {
             callback('User hoặc Project không tồn tại');
         } else {
             realm.write(() => {
-                realm.create('Task', {
+                let task = realm.create('Task', {
                     id: Task.getNextTaskId(),
                     name: 'newTask',
                     createdate: moment().toDate(),
@@ -25,6 +25,7 @@ module.exports = function (io, client, realm) {
                     project: project,
                     lastupdate: new Date()
                 });
+                callback(null, task.getJson());
             });
         }
     });
@@ -61,7 +62,7 @@ module.exports = function (io, client, realm) {
                 realm.write(() => {
                     task.lastupdate = new Date();
                     let newTask = realm.create('Task', task, true);
-                    callback(null, newTask);
+                    callback(null, newTask.getJon());
                 });
             }
         }
@@ -82,6 +83,7 @@ module.exports = function (io, client, realm) {
                     let isUpdate = task.subscribers.some(subscriber => {
                         if (subscriber.id == user.id) {
                             subscriber.status = 2;
+                            callback(null, 'Xác nhận Task thành công');
                             return true;
                         }
                         return false;
@@ -108,6 +110,7 @@ module.exports = function (io, client, realm) {
                 realm.write(() => {
                     let taskDelete = Task.getTaskById(taskId);
                     realm.delete(taskDelete);
+                    callback(null, 'Xóa thành công');
                 });
             }
         }
@@ -134,6 +137,6 @@ module.exports = function (io, client, realm) {
         let task = Task.getTaskById(taskId);
         if (!task) {
             callback('Không tìm thấy Task');
-        } else callback(null, task);
+        } else callback(null, task.getJon());
     });
 };

@@ -65,7 +65,7 @@ module.exports = function (io, client, realm) {
                 realm.write(() => {
                     project.lastupdate = new Date();
                     let newProject = realm.create('Project', project, true);
-                    callback(null, newProject);
+                    callback(null, newProject.getJson());
                 });
             }
         }
@@ -96,6 +96,7 @@ module.exports = function (io, client, realm) {
                         realm.delete(taskDel);
                     }
                     realm.delete(projectDelete);
+                    callback(null, 'Xóa thành công');
                 });
             }
         }

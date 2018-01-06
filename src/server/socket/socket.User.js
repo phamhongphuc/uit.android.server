@@ -49,7 +49,7 @@ module.exports = function (io, client, realm) {
             realm.write(() => {
                 user.lastupdate = new Date();
                 let newUser = realm.create('User', user, true);
-                callback(null, newUser);
+                callback(null, newUser.getJson());
             });
         }
     });

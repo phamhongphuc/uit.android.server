@@ -31,7 +31,8 @@ module.exports = function (io, client, realm) {
         } else {
             let messageList = channel.messages;
             let mList = messageList.sorted('time', true).slice(0, number);
-            console.log(mList);
+            // console.log(mList);
+            callback(null, mList.getJson());
         }
     });
 
@@ -48,7 +49,8 @@ module.exports = function (io, client, realm) {
                 let messages = channel.messages.sorted('time', true);
                 let messageIndex = messages.findIndex(o => o.id == messageId);
                 let messageList = messages.slice(0, messageIndex + 1);
-                console.log(messageList);
+                // console.log(messageList);
+                callback(null, messageList.getJson());
             }
         }
     });
@@ -58,6 +60,6 @@ module.exports = function (io, client, realm) {
         let message = Message.getMessageById(messageId);
         if (message == null) {
             callback('Không tìm thấy Message');
-        } else callback(null, message);
+        } else callback(null, message.getJson());
     });
 };

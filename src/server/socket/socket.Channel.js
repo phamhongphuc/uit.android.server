@@ -21,6 +21,7 @@ module.exports = function (io, client, realm) {
                 channel.members.push(user);
                 channel.project = project;
                 channel.lastupdate = new Date();
+                callback(null, channel.getJson());
             });
         }
     });
@@ -57,7 +58,7 @@ module.exports = function (io, client, realm) {
                 realm.write(() => {
                     channel.lastupdate = new Date();
                     let newChannel = realm.create('Channel', channel, true);
-                    callback(null, newChannel);
+                    callback(null, newChannel.getJson());
                 });
             }
         }
@@ -82,6 +83,7 @@ module.exports = function (io, client, realm) {
                         realm.delete(messageDel);
                     }
                     realm.delete(channelDelete);
+                    callback(null, 'Xóa thành công');
                 });
             }
         }
@@ -117,6 +119,6 @@ module.exports = function (io, client, realm) {
         let channel = Channel.getChannelById(channelId);
         if (channel == null) {
             callback('Không tìm thấy Channel');
-        } else callback(null, channel);
+        } else callback(null, channel.getJson());
     });
 };
