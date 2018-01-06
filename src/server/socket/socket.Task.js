@@ -25,6 +25,7 @@ module.exports = function (io, client, realm) {
                     project: project,
                     lastupdate: new Date()
                 });
+                task.subscribers.push(user);
                 callback(null, task.getJson());
             });
         }
