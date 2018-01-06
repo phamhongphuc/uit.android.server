@@ -9,6 +9,23 @@ class Channel {
         let channels = this.realm.objects('Channel');
         return channels.length == 0 ? 1 : channels.max('id') + 1;
     }
+    getJson() {
+        let properties = [
+            'id',
+            'name',
+
+            'createdate',
+            'lastupdate'
+        ];
+        let json = properties.reduce((map, obj) => {
+            map[obj] = this[obj];
+            return map;
+        }, {});
+        json.assignedId = this.assigned.id;
+        json.projectId = this.project.id;
+        return json;
+    }
+
 }
 Channel.schema = {
     name: 'Channel',
@@ -16,16 +33,19 @@ Channel.schema = {
     properties: {
         id: 'string',
         name: 'string',
+
+        createdate: 'date',
+        lastupdate: 'date',
+
         assigned: 'User',
         members: 'User[]',
         project: 'Project',
+
         messages: {
             type: 'linkingObjects',
             objectType: 'Message',
             property: 'channel'
-        },
-        createdate: 'date',
-        lastupdate: 'date'
+        }
     }
 };
 

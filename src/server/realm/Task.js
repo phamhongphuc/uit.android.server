@@ -8,6 +8,25 @@ class Task {
     static getNextTaskId() {
         return this.realm.objects('Task').max('id') + 1;
     }
+    getJson() {
+        let properties = [
+            'id',
+            'name',
+            'description',
+            'status',
+
+            'createdate',
+            'deadline',
+            'lastupdate'
+        ];
+        let json = properties.reduce((map, obj) => {
+            map[obj] = this[obj];
+            return map;
+        }, {});
+        json.assignedId = this.assigned.id;
+        json.projectId = this.project.id;
+        return json;
+    }
 }
 Task.schema = {
     name: 'Task',
@@ -16,13 +35,15 @@ Task.schema = {
         id: 'int',
         name: 'string',
         description: 'string?',
-        assigned: 'User',
-        subscribers: 'User[]',
         status: 'int',
-        project: 'Project',
+
         createdate: 'date',
         deadline: 'date',
-        lastupdate: 'date'
+        lastupdate: 'date',
+
+        assigned: 'User',
+        subscribers: 'User[]',
+        project: 'Project',
     }
 };
 
