@@ -4,6 +4,28 @@ import Task from '../realm/Task';
 import Project from '../realm/Project';
 
 module.exports = function (io, client, realm) {
+    //Create Task
+    client.on('Create:Task(userId,projectId)', (userId, projectId, callback) => {
+        let user = User.getUserById(userId);
+        let project = Project.getProjectById(projectId);
+        if (!user || !project) {
+            callback('User hoặc Project không tồn tại');
+        } else {
+            realm.write(() => {
+                realm.create('Task', {
+                    id: Task.getNextTaskId(),
+                    name: 'newTask',
+                    createdate: moment().toDate(),
+                    deadline: moment().add(1, 'week').toDate(),
+                    status: 0,
+                    assigned: user,
+                    project: project,
+                    lastupdate: new Date()
+                });
+            });
+        }
+    });
+
     //Subscriber Join một task
     client.on('Join:Task(taskId, userId)', (taskId, userId, callback) => {
         let task = Task.getTaskById(taskId);
@@ -17,6 +39,26 @@ module.exports = function (io, client, realm) {
             });
         }
     });
+
+    //Edit một task
+    client.on('Edit:Task(task, userId)', (task, userId, callback) => {
+        if (!task && !userId) {
+            callback('Task hoặc User không tồn tại');
+        } else {
+            let user = User.getUserById(userId);
+            let find = user.tasksOwn.find(o => o.id == task.id);
+            if (!find) {
+                callback('User không có quyền thao tác chức năng này');
+            } else {
+                realm.write(() => {
+                    task.lastupdate = new Date();
+                    let newTask = realm.create('Task', task, true);
+                    callback(null, newTask);
+                });
+            }
+        }
+    });
+
     //Xác nhận Task đã hoàn thành
     client.on('Confirm:Task(taskId, userId)', (taskId, userId, callback) => {
         let task = Task.getTaskById(taskId);
@@ -39,45 +81,7 @@ module.exports = function (io, client, realm) {
             });
         }
     });
-    //Edit một task
-    client.on('Edit:Task(task, userId)', (task, userId, callback) => {
-        if (!task && !userId) {
-            callback('Task hoặc User không tồn tại');
-        } else {
-            let user = User.getUserById(userId);
-            let find = user.tasksOwn.find(o => o.id == task.id);
-            if (!find) {
-                callback('User không có quyền thao tác chức năng này');
-            } else {
-                realm.write(() => {
-                    task.lastupdate = new Date();
-                    let newTask = realm.create('Task', task, true);
-                    callback(null, newTask);
-                });
-            }
-        }
-    });
-    //Create Task
-    client.on('Create:Task(userId,projectId)', (userId, projectId, callback) => {
-        let user = User.getUserById(userId);
-        let project = Project.getProjectById(projectId);
-        if (!user || !project) {
-            callback('User hoặc Project không tồn tại');
-        } else {
-            realm.write(() => {
-                realm.create('Task', {
-                    id: Task.getNextTaskId(),
-                    name: 'newTask',
-                    createdate: moment().toDate(),
-                    deadline: moment().add(1, 'week').toDate(),
-                    status: 0,
-                    assigned: user,
-                    project: project,
-                    lastupdate: new Date()
-                });
-            });
-        }
-    });
+
     // Show ra toàn bộ Subscribers Id mà Task có
     client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
         let task = Task.getTaskById(taskId);
@@ -92,6 +96,7 @@ module.exports = function (io, client, realm) {
             callback(null, subscribersId);
         }
     });
+    
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback) => {
         let task = Task.getTaskById(taskId);

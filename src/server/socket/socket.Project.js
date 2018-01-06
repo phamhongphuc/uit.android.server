@@ -6,26 +6,7 @@ module.exports = function (io, client, realm) {
     // realm.objects('Project').addListener((puppies, changes) => {
     //     // console.log('Project', puppies, changes);
     // });
-
-    //Edit một Project
-    client.on('Edit:Project(project, userId)', (project, userId, callback) => {
-        if (!project || !userId) {
-            callback('Project hoặc User không tồn tại');
-        } else {
-            let user = User.getUserById(userId);
-            let find = user.projectsOwn.find(o => o.id == project.id);
-            if (!find) {
-                callback('User không có quyền thao tác chức năng này');
-            } else {
-                realm.write(() => {
-                    project.lastupdate = new Date();
-                    let newProject = realm.create('Project', project, true);
-                    callback(null, newProject);
-                });
-            }
-        }
-    });
-
+    
     //Create Project
     client.on('Create:Project(userId)', (userId, callback) => {
         console.log(`\nCreate:Project(userId = ${userId})`);
@@ -51,6 +32,7 @@ module.exports = function (io, client, realm) {
             });
         }
     });
+
     //Thêm một thành viên vào Channel
     client.on('Add:Project.Member(projectId, userId)', (projectId, userId, callback) => {
         let project = Project.getProjectById(projectId);
@@ -64,6 +46,26 @@ module.exports = function (io, client, realm) {
             });
         }
     });
+
+    //Edit một Project
+    client.on('Edit:Project(project, userId)', (project, userId, callback) => {
+        if (!project || !userId) {
+            callback('Project hoặc User không tồn tại');
+        } else {
+            let user = User.getUserById(userId);
+            let find = user.projectsOwn.find(o => o.id == project.id);
+            if (!find) {
+                callback('User không có quyền thao tác chức năng này');
+            } else {
+                realm.write(() => {
+                    project.lastupdate = new Date();
+                    let newProject = realm.create('Project', project, true);
+                    callback(null, newProject);
+                });
+            }
+        }
+    });
+
     // Show ra toàn bộ Task Id mà Project có
     client.on('Get:Project.Tasks(projectId)', (projectId, callback) => {
         let project = Project.getProjectById(projectId);
@@ -78,6 +80,7 @@ module.exports = function (io, client, realm) {
             callback(null, tasksId);
         }
     });
+
     // Show ra toàn bộ Channel Id mà Project có
     client.on('Get:Project.Channels(projectId)', (projectId, callback) => {
         let project = Project.getProjectById(projectId);
@@ -92,6 +95,7 @@ module.exports = function (io, client, realm) {
             callback(null, channelsId);
         }
     });
+
     // Show ra toàn bộ Member Id mà Project có
     client.on('Get:Project.Members(projectId)', (projectId, callback) => {
         let project = Project.getProjectById(projectId);

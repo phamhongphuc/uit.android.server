@@ -53,6 +53,16 @@ User.schema = {
             objectType: 'Task',
             property: 'assigned'
         },
+        channels: {
+            type: 'linkingObjects',
+            objectType: 'Channel',
+            property: 'members'
+        },
+        channelsOwn: {
+            type: 'linkingObjects',
+            objectType: 'Channel',
+            property: 'assigned'
+        },
         description: 'string?',
         lastupdate: 'date'
     }
