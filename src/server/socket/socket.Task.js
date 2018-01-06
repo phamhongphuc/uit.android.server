@@ -112,7 +112,7 @@ module.exports = function (io, client, realm) {
             }
         }
     });
-    
+
     // Show ra toàn bộ Subscribers Id mà Task có
     client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
         let task = Task.getTaskById(taskId);

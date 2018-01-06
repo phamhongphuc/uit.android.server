@@ -63,6 +63,24 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    // Delete Task
+    client.on('Delete:Channel(channelId, userId)', (channelId, userId, callback) => {
+        if (!channelId || !userId) {
+            callback('Channel hoặc User không tồn tại');
+        } else {
+            let user = User.getUserById(userId);
+            let find = user.channelsOwn.find(o => o.id == channelId);
+            if (!find) {
+                callback('User không có quyền thao tác với chức năng này');
+            } else {
+                realm.write(() => {
+                    let channelDelete = Channel.getChannelById(channelId);
+                    realm.delete(channelDelete);
+                });
+            }
+        }
+    });
+
     // Trả về toàn bộ thông tin của Channel
     client.on('Get:Channel(channelId)', (channelId, callback) => {
         let channel = Channel.getChannelById(channelId);

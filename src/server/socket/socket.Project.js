@@ -71,6 +71,24 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    // Delete Project
+    client.on('Delete:Project(projectId, userId)', (projectId, userId, callback) => {
+        if (!projectId || !userId) {
+            callback('Project hoặc User không tồn tại');
+        } else {
+            let user = User.getUserById(userId);
+            let find = user.projectsOwn.find(o => o.id == projectId);
+            if (!find) {
+                callback('User không có quyền thao tác với chức năng này');
+            } else {
+                realm.write(() => {
+                    let projectDelete = Project.getProjectById(projectId);
+                    realm.delete(projectDelete);
+                });
+            }
+        }
+    });
+
     // Show ra toàn bộ Task Id mà Project có
     client.on('Get:Project.Tasks(projectId)', (projectId, callback) => {
         let project = Project.getProjectById(projectId);
