@@ -5,9 +5,9 @@ import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
     //Create Channel
-    client.on('Create:Channel(userId, projectId)', (userId, projectId, callback) => {
-        let user = User.getUserById(userId);
+    client.on('Create:Channel(projectId, userId)', (projectId, userId, callback) => {
         let project = Project.getProjectById(projectId);
+        let user = User.getUserById(userId);
         if (!user || !project) {
             callback('User hoặc Project không tồn tại');
         } else {

@@ -6,7 +6,7 @@ module.exports = function (io, client, realm) {
     // realm.objects('Project').addListener((puppies, changes) => {
     //     // console.log('Project', puppies, changes);
     // });
-    
+
     //Create Project
     client.on('Create:Project(userId)', (userId, callback) => {
         console.log(`\nCreate:Project(userId = ${userId})`);
@@ -33,17 +33,22 @@ module.exports = function (io, client, realm) {
         }
     });
 
-    //Thêm một thành viên vào Channel
+    //Thêm một thành viên vào Project
     client.on('Add:Project.Member(projectId, userId)', (projectId, userId, callback) => {
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!project || !user) {
             callback('Project hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                project.members.push(user);
-                callback(null, projectId);
-            });
+            let find = user.projects.find(o => o.id == project.id);
+            if (!find) {
+                realm.write(() => {
+                    project.members.push(user);
+                    callback(null, projectId);
+                });
+            } else {
+                callback('User đã tồn tại trong Project, không thể thêm mới');
+            }
         }
     });
 

@@ -1,16 +1,8 @@
-import moment from 'moment';
 import Message from '../realm/Message';
 import User from '../realm/User';
 import Channel from '../realm/Channel';
 
 module.exports = function (io, client, realm) {
-    // Trả về toàn bộ thông tin của Message
-    client.on('Get:Message(messageId)', (messageId, callback) => {
-        let message = Message.getMessageById(messageId);
-        if (message == null) {
-            callback('Không tìm thấy Message');
-        } else callback(null, message);
-    });
     //New Message
     client.on('New:Message(channelId, userId, content)', (channelId, userId, content, callback) => {
         let user = User.getUserById(userId);
@@ -20,7 +12,7 @@ module.exports = function (io, client, realm) {
         } else {
             realm.write(() => {
                 let message = realm.create('Message', {
-                    id: Channel.getNextMessagelId(),
+                    id: Message.getNextMessagelId(),
                     time: new Date(),
                     content: content
                 });
@@ -30,6 +22,7 @@ module.exports = function (io, client, realm) {
             io.emit('New:Message.Return');
         }
     });
+
     //tải message lên khi client: size = 0
     client.on('Load.Message.Empty(channelId, number)', (channelId, number, callback) => {
         let channel = Channel.getChannelById(channelId);
@@ -41,6 +34,7 @@ module.exports = function (io, client, realm) {
             console.log(mList);
         }
     });
+
     // tải message từ messageId trở xuống
     client.on('Load:Message.MessId(channelId, messageId, number)', (channelId, messageId, number, callback) => {
         let channel = Channel.getChannelById(channelId);
@@ -57,5 +51,13 @@ module.exports = function (io, client, realm) {
                 console.log(messageList);
             }
         }
+    });
+
+    // Trả về toàn bộ thông tin của Message
+    client.on('Get:Message(messageId)', (messageId, callback) => {
+        let message = Message.getMessageById(messageId);
+        if (message == null) {
+            callback('Không tìm thấy Message');
+        } else callback(null, message);
     });
 };

@@ -5,9 +5,9 @@ import Project from '../realm/Project';
 
 module.exports = function (io, client, realm) {
     //Create Task
-    client.on('Create:Task(userId,projectId)', (userId, projectId, callback) => {
-        let user = User.getUserById(userId);
+    client.on('Create:Task(projectId, userId)', (projectId, userId, callback) => {
         let project = Project.getProjectById(projectId);
+        let user = User.getUserById(userId);
         if (!user || !project) {
             callback('User hoặc Project không tồn tại');
         } else {
