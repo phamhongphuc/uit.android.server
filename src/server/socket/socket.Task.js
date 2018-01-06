@@ -113,20 +113,36 @@ module.exports = function (io, client, realm) {
         }
     });
 
-    // Show ra toàn bộ Subscribers Id mà Task có
-    client.on('Get:Task.Subscribers(taskId)', (taskId, callback = () => {}) => {
+    // Trả về assigned Id tạo Task
+    client.on('Get:Task.assigned(taskId)', (taskId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
         if (!task) {
-            callback('Task không tồn tại');
-        } else {
-            let subscribersId = [];
-            task.subscribers.forEach(subscriber => {
-                subscribersId.push(subscriber.id);
-            });
-            console.log(subscribersId);
-            callback(null, subscribersId);
-        }
+            callback('Không tìm thấy Task');
+        } else callback(null, task.assigned.map(user => user.id));
     });
+
+    // Trả về toàn bộ subscribers Id đang tham gia Task
+    client.on('Get:Task.subscribers(taskId)', (taskId, callback = () => {}) => {
+        let task = Task.getTaskById(taskId);
+        if (!task) {
+            callback('Không tìm thấy Task');
+        } else callback(null, task.subscribers.map(user => user.id));
+    });
+
+    // // Show ra toàn bộ Subscribers Id mà Task có
+    // client.on('Get:Task.Subscribers(taskId)', (taskId, callback = () => {}) => {
+    //     let task = Task.getTaskById(taskId);
+    //     if (!task) {
+    //         callback('Task không tồn tại');
+    //     } else {
+    //         let subscribersId = [];
+    //         task.subscribers.forEach(subscriber => {
+    //             subscribersId.push(subscriber.id);
+    //         });
+    //         console.log(subscribersId);
+    //         callback(null, subscribersId);
+    //     }
+    // });
 
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback = () => {}) => {

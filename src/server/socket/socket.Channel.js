@@ -81,6 +81,31 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    // Trả về assigned Id tạo Channel
+    client.on('Get:Channel.assigned(channelId)', (channelId, callback = () => {}) => {
+        let channel = Channel.getChannelById(channelId);
+        if (!channel) {
+            callback('Không tìm thấy Channel');
+        } else callback(null, channel.assigned.map(user => user.id));
+    });
+
+    // Trả về toàn bộ members Id đang tham gia Channel
+    client.on('Get:Channel.members(channelId)', (channelId, callback = () => {}) => {
+        let channel = Channel.getChannelById(channelId);
+        if (!channel) {
+            callback('Không tìm thấy Channel');
+        } else callback(null, channel.members.map(user => user.id));
+    });
+
+    // Trả về toàn bộ message Id có trong Channel
+    client.on('Get:Channel.messages(channelId)', (channelId, callback = () => {}) => {
+        let channel = Channel.getChannelById(channelId);
+        if (!channel) {
+            callback('Không tìm thấy Channel');
+        } else callback(null, channel.messages.map(message => message.id));
+    });
+
+
     // Trả về toàn bộ thông tin của Channel
     client.on('Get:Channel(channelId)', (channelId, callback = () => {}) => {
         let channel = Channel.getChannelById(channelId);
