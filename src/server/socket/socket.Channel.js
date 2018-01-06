@@ -75,6 +75,12 @@ module.exports = function (io, client, realm) {
             } else {
                 realm.write(() => {
                     let channelDelete = Channel.getChannelById(channelId);
+                    let messageDel = channelDelete.messages;
+                    if (!messageDel) {
+                        callback('Message trống');
+                    } else {
+                        realm.delete(messageDel);
+                    }
                     realm.delete(channelDelete);
                 });
             }

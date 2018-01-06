@@ -83,6 +83,18 @@ module.exports = function (io, client, realm) {
             } else {
                 realm.write(() => {
                     let projectDelete = Project.getProjectById(projectId);
+                    let channelDel = projectDelete.channels;
+                    if (!channelDel) {
+                        callback('Channel trống');
+                    } else {
+                        realm.delete(channelDel);
+                    }
+                    let taskDel = projectDelete.tasks;
+                    if (!taskDel) {
+                        callback('Task trống');
+                    } else {
+                        realm.delete(taskDel);
+                    }
                     realm.delete(projectDelete);
                 });
             }
