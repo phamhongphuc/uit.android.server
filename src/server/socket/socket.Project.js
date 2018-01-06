@@ -144,4 +144,22 @@ module.exports = function (io, client, realm) {
             callback(null, project.getJson());
         }
     });
+
+    // Show ra toàn bộ Project Id mà user đã tham gia
+    client.on('Get:Projects(userId)', (userId, callback = () => {}) => {
+        console.log(`\nGet:Projects(userId = ${userId})`);
+        let user = User.getUserById(userId);
+        if (!user) {
+            callback('User không tồn tại');
+        } else {
+            let projectsID = [];
+            user.projects.forEach(project => {
+                projectsID.push(project.id);
+            });
+            // console.log(projectsID);
+            console.log(`  => return projectsId[].length = ${projectsID.length}`);
+            // console.log(user.projects);
+            callback(null, projectsID);
+        }
+    });
 };

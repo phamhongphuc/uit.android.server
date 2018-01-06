@@ -14,12 +14,8 @@ class Project {
         let properties = [
             'id',
             'name',
-            // 'tasks',
-            // 'creator',
-            // 'members',
             'description',
-            // 'tags',
-            // 'channels',
+
             'createdate',
             'deadline',
             'lastupdate'
@@ -28,10 +24,7 @@ class Project {
             map[obj] = this[obj];
             return map;
         }, {});
-        json.tasks = this.tasks.map(task => task.id);
         json.creatorId = this.creator.id;
-        json.membersId = this.members.map(member => member.id);
-        json.channelsId = this.channels.map(channel => channel.id);
         return json;
     }
 }
@@ -41,9 +34,18 @@ Project.schema = {
     properties: {
         id: 'int',
         name: 'string',
+        description: 'string?',
+
+        // Sẽ bỏ đi
+        tags: 'string[]',
+
+        createdate: 'date',
+        deadline: 'date',
+        lastupdate: 'date',
+
         creator: 'User',
         members: 'User[]',
-        description: 'string?',
+
         channels: {
             type: 'linkingObjects',
             objectType: 'Channel',
@@ -54,10 +56,6 @@ Project.schema = {
             objectType: 'Task',
             property: 'project'
         },
-        tags: 'string[]',
-        createdate: 'date',
-        deadline: 'date',
-        lastupdate: 'date'
     }
 };
 

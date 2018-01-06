@@ -26,13 +26,13 @@ module.exports = function (app) {
     // let a = creator.projectsOwn.sorted('id',true);
     // let b = a.findIndex(o => o.id == 1);
     // console.log(find);
-    let user = User.getUserById(1);
-    let findTask = user.tasks.find(o=>o.id = 1);
-    realm.write(() => {
-        let temp = Project.getProjectById(4);
-        console.log(temp);
-        realm.delete(temp);
-    });
+    // let user = User.getUserById(1);
+    // let findTask = user.tasks.find(o=>o.id = 1);
+    // realm.write(() => {
+    //     let temp = Project.getProjectById(4);
+    //     console.log(temp);
+    //     realm.delete(temp);
+    // });
 
     // Project.getProjectById(3).getJson();
 };
