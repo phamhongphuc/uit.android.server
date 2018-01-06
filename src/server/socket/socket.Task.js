@@ -34,13 +34,12 @@ module.exports = function (io, client, realm) {
             callback('Task hoặc User không tồn tại');
         } else {
             let find = user.tasks.find(o => o.id == task.id);
-            if(!find) {
+            if (!find) {
                 realm.write(() => {
                     task.subscribers.push(user);
                     callback(null, taskId);
                 });
-            }
-            else {
+            } else {
                 callback('User đã tồn tại trong task, không thể thêm mới');
             }
         }
@@ -72,19 +71,24 @@ module.exports = function (io, client, realm) {
         if (!task || !user) {
             callback('Task hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                let isUpdate = task.subscribers.some(subscriber => {
-                    if (subscriber.id == user.id) {
-                        subscriber.status = 2;
-                        return true;
-                    }
-                    return false;
+            let find = user.tasks.find(o => o.id == task.id);
+            if (!find) {
+                callback('User không có quyền thao tác chức năng này');
+            } else {
+                realm.write(() => {
+                    let isUpdate = task.subscribers.some(subscriber => {
+                        if (subscriber.id == user.id) {
+                            subscriber.status = 2;
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (isUpdate) {
+                        task.lastupdate = new Date();
+                        callback(null, taskId);
+                    } else callback('Không tìm thấy Task');
                 });
-                if (isUpdate) {
-                    task.lastupdate = new Date();
-                    callback(null, taskId);
-                } else callback('Không tìm thấy Task');
-            });
+            }
         }
     });
 
