@@ -32,10 +32,15 @@ module.exports = function (io, client, realm) {
         if (!channel || !user) {
             callback('Channel hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                channel.members.push(user);
-                callback(null, channelId);
-            });
+            let find = user.channels.find(o => o.id == channel.id);
+            if (!find) {
+                realm.write(() => {
+                    channel.members.push(user);
+                    callback(null, channelId);
+                });
+            } else {
+                callback('User đã tồn tại trong channel, không thể thêm mới');
+            }
         }
     });
 
