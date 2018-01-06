@@ -52,6 +52,29 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    //Thêm một thành viên vào Project = email
+    client.on('Add.Project.Member(projectId, email)', (projectId, email, callback = () => {}) => {
+        let project = Project.getProjectById(projectId);
+        if (!project) {
+            callback('Project không tồn tại');
+        } else {
+            let user = realm.objects('User').find(object => object.email == email);
+            if (!user) {
+                callback('Email không tồn tại');
+            } else {
+                let find = user.projects.find(o => o.id == project.id);
+                if (!find) {
+                    realm.write(() => {
+                        project.members.push(user);
+                        callback(null, projectId);
+                    });
+                } else {
+                    callback('User đã tồn tại trong Project, không thể thêm mới');
+                }
+            }
+        }
+    });
+
     //Edit một Project
     client.on('Edit:Project(project, userId)', (project, userId, callback = () => {}) => {
         if (!project || !userId) {
