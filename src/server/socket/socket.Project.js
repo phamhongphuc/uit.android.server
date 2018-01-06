@@ -89,50 +89,82 @@ module.exports = function (io, client, realm) {
         }
     });
 
-    // Show ra toàn bộ Task Id mà Project có
-    client.on('Get:Project.Tasks(projectId)', (projectId, callback = () => {}) => {
+    // Trả về toàn bộ Task Id mà project
+    client.on('Get:Project.tasks(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
-            callback('Project không tồn tại');
-        } else {
-            let tasksId = [];
-            project.tasks.forEach(task => {
-                tasksId.push(task.id);
-            });
-            console.log(tasksId);
-            callback(null, tasksId);
-        }
+            callback('Không tìm thấy Project');
+        } else callback(null, project.tasks.map(task => task.id));
     });
 
-    // Show ra toàn bộ Channel Id mà Project có
-    client.on('Get:Project.Channels(projectId)', (projectId, callback = () => {}) => {
+    // // Show ra toàn bộ Task Id mà Project có
+    // client.on('Get:Project.Tasks(projectId)', (projectId, callback = () => {}) => {
+    //     let project = Project.getProjectById(projectId);
+    //     if (!project) {
+    //         callback('Project không tồn tại');
+    //     } else {
+    //         let tasksId = [];
+    //         project.tasks.forEach(task => {
+    //             tasksId.push(task.id);
+    //         });
+    //         console.log(tasksId);
+    //         callback(null, tasksId);
+    //     }
+    // });
+
+    // Trả về toàn bộ Channel Id mà Project có
+    client.on('Get:Project.channels(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
-            callback('Project không tồn tại');
-        } else {
-            let channelsId = [];
-            project.channels.forEach(channel => {
-                channelsId.push(channel.id);
-            });
-            console.log(channelsId);
-            callback(null, channelsId);
-        }
+            callback('Không tìm thấy Project');
+        } else callback(null, project.channels.map(channel => channel.id));
     });
 
-    // Show ra toàn bộ Member Id mà Project có
-    client.on('Get:Project.Members(projectId)', (projectId, callback = () => {}) => {
+    // // Show ra toàn bộ Channel Id mà Project có
+    // client.on('Get:Project.Channels(projectId)', (projectId, callback = () => {}) => {
+    //     let project = Project.getProjectById(projectId);
+    //     if (!project) {
+    //         callback('Project không tồn tại');
+    //     } else {
+    //         let channelsId = [];
+    //         project.channels.forEach(channel => {
+    //             channelsId.push(channel.id);
+    //         });
+    //         console.log(channelsId);
+    //         callback(null, channelsId);
+    //     }
+    // });
+
+    // Trả về User Id tạo Project
+    client.on('Get:Project.creator(projectId)', (projectId, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
-            callback('Project không tồn tại');
-        } else {
-            let membersId = [];
-            project.member.forEach(member => {
-                membersId.push(member.id);
-            });
-            // console.log(membersId);
-            callback(null, membersId);
-        }
+            callback('Không tìm thấy Project');
+        } else callback(null, project.creator.map(user => user.id));
     });
+
+    // Trả về toàn bộ Member Id đang tham gia Project
+    client.on('Get:Project.members(projectId)', (projectId, callback = () => {}) => {
+        let project = Project.getProjectById(projectId);
+        if (!project) {
+            callback('Không tìm thấy Project');
+        } else callback(null, project.members.map(user => user.id));
+    });
+
+    // // Show ra toàn bộ Member Id mà Project có
+    // client.on('Get:Project.Members(projectId)', (projectId, callback = () => {}) => {
+    //     let project = Project.getProjectById(projectId);
+    //     if (!project) {
+    //         callback('Project không tồn tại');
+    //     } else {
+    //         let membersId = [];
+    //         project.member.forEach(member => {
+    //             membersId.push(member.id);
+    //         });
+    //         // console.log(membersId);
+    //         callback(null, membersId);
+    //     }
+    // });
 
     // Trả về toàn bộ thông tin của Project
     client.on('Get:Project(projectId)', (projectId, callback = () => {}) => {
@@ -146,21 +178,21 @@ module.exports = function (io, client, realm) {
         }
     });
 
-    // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('Get:Projects(userId)', (userId, callback = () => {}) => {
-        console.log(`\nGet:Projects(userId = ${userId})`);
-        let user = User.getUserById(userId);
-        if (!user) {
-            callback('User không tồn tại');
-        } else {
-            let projectsID = [];
-            user.projects.forEach(project => {
-                projectsID.push(project.id);
-            });
-            console.log(projectsID);
-            console.log(`  => return projectsId[].length = ${projectsID.length}`);
-            // console.log(user.projects);
-            // callback(null, projectsID);
-        }
-    });
+    // // Show ra toàn bộ Project Id mà user đã tham gia
+    // client.on('Get:Projects(userId)', (userId, callback = () => {}) => {
+    //     console.log(`\nGet:Projects(userId = ${userId})`);
+    //     let user = User.getUserById(userId);
+    //     if (!user) {
+    //         callback('User không tồn tại');
+    //     } else {
+    //         let projectsID = [];
+    //         user.projects.forEach(project => {
+    //             projectsID.push(project.id);
+    //         });
+    //         console.log(projectsID);
+    //         console.log(`  => return projectsId[].length = ${projectsID.length}`);
+    //         // console.log(user.projects);
+    //         // callback(null, projectsID);
+    //     }
+    // });
 };
