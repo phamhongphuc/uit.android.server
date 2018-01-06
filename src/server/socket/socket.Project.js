@@ -8,15 +8,21 @@ module.exports = function (io, client, realm) {
     // });
 
     //Edit một Project
-    client.on('Edit:Project(project)', (project, callback) => {
-        if (!project) {
-            callback('Project không tồn tại');
+    client.on('Edit:Project(project)', (project, userId, callback) => {
+        if (!project || !userId) {
+            callback('Project hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                project.lastupdate = new Date();
-                let newProject = realm.create('Task', project, true);
-                callback(null, newProject);
-            });
+            let user = User.getUserById(userId);
+            let find = user.projectsOwn.find(o => o.id == project.id);
+            if (!find) {
+                callback('User không có quyền thao tác chức năng này');
+            } else {
+                realm.write(() => {
+                    project.lastupdate = new Date();
+                    let newProject = realm.create('Project', project, true);
+                    callback(null, newProject);
+                });
+            }
         }
     });
 

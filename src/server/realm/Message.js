@@ -3,7 +3,7 @@ class Message {
         this.realm = realm;
     }
     static getMessageById(messageId) {
-        return this.realm.objects('Channel').find(object => object.id == messageId);
+        return this.realm.objects('Message').find(object => object.id == messageId);
     }
     static getNextMessagelId() {
         let messages = this.realm.objects('Message');
