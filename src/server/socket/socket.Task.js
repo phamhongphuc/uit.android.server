@@ -129,21 +129,6 @@ module.exports = function (io, client, realm) {
         } else callback(null, task.subscribers.map(user => user.id));
     });
 
-    // // Show ra toàn bộ Subscribers Id mà Task có
-    // client.on('Get:Task.Subscribers(taskId)', (taskId, callback = () => {}) => {
-    //     let task = Task.getTaskById(taskId);
-    //     if (!task) {
-    //         callback('Task không tồn tại');
-    //     } else {
-    //         let subscribersId = [];
-    //         task.subscribers.forEach(subscriber => {
-    //             subscribersId.push(subscriber.id);
-    //         });
-    //         console.log(subscribersId);
-    //         callback(null, subscribersId);
-    //     }
-    // });
-
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback = () => {}) => {
         let task = Task.getTaskById(taskId);
