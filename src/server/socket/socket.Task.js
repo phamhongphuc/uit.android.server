@@ -33,10 +33,16 @@ module.exports = function (io, client, realm) {
         if (!task || !user) {
             callback('Task hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                task.subscribers.push(user);
-                callback(null, taskId);
-            });
+            let find = user.tasks.find(o => o.id == task.id);
+            if(!find) {
+                realm.write(() => {
+                    task.subscribers.push(user);
+                    callback(null, taskId);
+                });
+            }
+            else {
+                callback('User đã tồn tại trong task, không thể thêm mới');
+            }
         }
     });
 
@@ -96,7 +102,7 @@ module.exports = function (io, client, realm) {
             callback(null, subscribersId);
         }
     });
-    
+
     // Trả về toàn bộ thông tin của Task
     client.on('Get:Task(taskId)', (taskId, callback) => {
         let task = Task.getTaskById(taskId);
