@@ -147,7 +147,7 @@ module.exports = function (io, client, realm) {
     });
 
     // Show ra toàn bộ Project Id mà user đã tham gia
-    client.on('Get:Projects(userId)', (userId, callback) => {
+    client.on('Get:Projects(userId)', (userId, callback = () => {}) => {
         console.log(`\nGet:Projects(userId = ${userId})`);
         let user = User.getUserById(userId);
         if (!user) {
@@ -157,9 +157,10 @@ module.exports = function (io, client, realm) {
             user.projects.forEach(project => {
                 projectsID.push(project.id);
             });
-            // console.log(projectsID);
+            console.log(projectsID);
             console.log(`  => return projectsId[].length = ${projectsID.length}`);
-            callback(null, projectsID);
+            // console.log(user.projects);
+            // callback(null, projectsID);
         }
     });
 };

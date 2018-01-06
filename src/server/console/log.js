@@ -27,11 +27,11 @@ module.exports = function (app) {
     // let b = a.findIndex(o => o.id == 1);
     // console.log(find);
 
-    realm.write(() => {
-        let temp = Task.getTaskById(1);
-        console.log(temp);
-        realm.delete(temp);
-    });
+    // realm.write(() => {
+    //     let temp = Task.getTaskById(1);
+    //     console.log(temp);
+    //     realm.delete(temp);
+    // });
 
     // Project.getProjectById(3).getJson();
 };
