@@ -2,6 +2,9 @@ import moment from 'moment';
 import User from '../realm/User';
 import Task from '../realm/Task';
 import Project from '../realm/Project';
+import {
+    callbackify
+} from 'util';
 
 module.exports = function (io, client, realm) {
     //Create Task
@@ -92,6 +95,24 @@ module.exports = function (io, client, realm) {
         }
     });
 
+    // Delete Task
+    client.on('Delete:Task(taskId, userId)', (taskId, userId, callback) => {
+        if (!taskId || !userId) {
+            callback('Task hoặc User không tồn tại');
+        } else {
+            let user = User.getUserById(userId);
+            let find = user.tasksOwn.find(o => o.id == taskId);
+            if (!find) {
+                callback('User không có quyền thao tác với chức năng này');
+            } else {
+                realm.write(() => {
+                    let taskDelete = Task.getTaskById(taskId);
+                    realm.delete(taskDelete);
+                });
+            }
+        }
+    });
+    
     // Show ra toàn bộ Subscribers Id mà Task có
     client.on('Get:Task.Subscribers(taskId)', (taskId, callback) => {
         let task = Task.getTaskById(taskId);
