@@ -8,7 +8,7 @@ module.exports = function (io, client, realm) {
     // });
 
     //Edit một Project
-    client.on('Edit:Project(project)', (project, userId, callback) => {
+    client.on('Edit:Project(project, userId)', (project, userId, callback) => {
         if (!project || !userId) {
             callback('Project hoặc User không tồn tại');
         } else {

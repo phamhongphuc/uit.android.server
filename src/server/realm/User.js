@@ -43,6 +43,16 @@ User.schema = {
             objectType: 'Project',
             property: 'creator'
         },
+        tasks: {
+            type: 'linkingObjects',
+            objectType: 'Task',
+            property: 'subscribers'
+        },
+        tasksOwn: {
+            type: 'linkingObjects',
+            objectType: 'Task',
+            property: 'assigned'
+        },
         description: 'string?',
         lastupdate: 'date'
     }

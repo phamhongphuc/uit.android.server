@@ -40,15 +40,21 @@ module.exports = function (io, client, realm) {
         }
     });
     //Edit một task
-    client.on('Edit:Task(task)', (task, callback) => {
-        if (!task) {
-            callback('Task không tồn tại');
+    client.on('Edit:Task(task, userId)', (task, userId, callback) => {
+        if (!task && !userId) {
+            callback('Task hoặc User không tồn tại');
         } else {
-            realm.write(() => {
-                task.lastupdate = new Date();
-                let newTask = realm.create('Task', task, true);
-                callback(null, newTask);
-            });
+            let user = User.getUserById(userId);
+            let find = user.tasksOwn.find(o => o.id == task.id);
+            if (!find) {
+                callback('User không có quyền thao tác chức năng này');
+            } else {
+                realm.write(() => {
+                    task.lastupdate = new Date();
+                    let newTask = realm.create('Task', task, true);
+                    callback(null, newTask);
+                });
+            }
         }
     });
     //Create Task
