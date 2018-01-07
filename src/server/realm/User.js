@@ -6,7 +6,7 @@ class User {
         return this.realm.objects('User').find(object => object.id == userId);
     }
     getJson() {
-        let properties = [
+        return [
             'id',
             'name',
             'description',
@@ -16,12 +16,10 @@ class User {
             'email',
 
             'lastupdate'
-        ];
-        let json = properties.reduce((map, obj) => {
+        ].reduce((map, obj) => {
             map[obj] = this[obj];
             return map;
         }, {});
-        return json;
     }
 }
 User.schema = {
@@ -37,6 +35,7 @@ User.schema = {
         email: 'string',
 
         lastupdate: 'date',
+        
         projects: {
             type: 'linkingObjects',
             objectType: 'Project',

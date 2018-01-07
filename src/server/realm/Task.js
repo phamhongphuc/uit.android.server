@@ -9,7 +9,7 @@ class Task {
         return this.realm.objects('Task').max('id') + 1;
     }
     getJson() {
-        let properties = [
+        let json = [
             'id',
             'name',
             'description',
@@ -18,13 +18,10 @@ class Task {
             'createdate',
             'deadline',
             'lastupdate'
-        ];
-        let json = properties.reduce((map, obj) => {
+        ].reduce((map, obj) => {
             map[obj] = this[obj];
             return map;
         }, {});
-        json.assignedId = this.assigned.id;
-        json.projectId = this.project.id;
         return json;
     }
 }

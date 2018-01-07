@@ -11,23 +11,18 @@ class Project {
         return this.realm.objects('Project').find(object => object.id == projectId);
     }
     getJson() {
-        let properties = [
+        let json = [
             'id',
             'name',
             'description',
-
+            
             'createdate',
             'deadline',
             'lastupdate'
-        ];
-        let json = properties.reduce((map, obj) => {
+        ].reduce((map, obj) => {
             map[obj] = this[obj];
             return map;
         }, {});
-        json.members = this.members.map(user => user.getJson());
-        if (this.creator != null) {
-            json.creatorId = this.creator.id;
-        }
         return json;
     }
 }

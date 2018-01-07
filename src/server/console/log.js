@@ -33,8 +33,8 @@ module.exports = function (app) {
     //     console.log(temp);
     //     realm.delete(temp);
     // });
-    let email = 'abc@gmail.com';
-    let user = realm.objects('User').find(object => object.email == email);
-    console.log(user);
+    // let email = 'abc@gmail.com';
+    // let user = realm.objects('User').find(object => object.email == email);
+    // console.log(user);
     // Project.getProjectById(3).getJson();
 };
