@@ -26,9 +26,14 @@ module.exports = function (io, client, realm) {
                 });
                 project.creator = user;
                 project.members.push(user);
-                user.lastupdate = new Date();
+                // user.lastupdate = new Date();
                 console.log(`  => return project: project.id = ${project.id}`);
-                callback(null, project.getJson());
+                let projectJson = project.getJson();
+                projectJson.creator = project.getCreator();
+                projectJson.members = project.getMembers();
+                projectJson.tasks = project.getTasks();
+                projectJson.channels = project.getChannels();
+                callback(null, projectJson);
             });
         }
     });

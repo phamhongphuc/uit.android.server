@@ -15,7 +15,7 @@ class Project {
             'id',
             'name',
             'description',
-            
+
             'createdate',
             'deadline',
             'lastupdate'
@@ -24,6 +24,34 @@ class Project {
             return map;
         }, {});
         return json;
+    }
+    getCreator() {
+        return this.creator ? this.creator.getJson() : undefined;
+    }
+    getMembers() {
+        return this.members.map(
+            member => member.getJson()
+        );
+    }
+    getTasks() {
+        return this.tasks.map(task => {
+            let taskJson = task.getJson();
+            taskJson.assigned = task.assigned.getJson();
+            taskJson.subscribers = task.subscribers.map(
+                user => user.getJson()
+            );
+            taskJson.project = task.project.getJson();
+            return taskJson;
+        });
+    }
+    getChannels() {
+        return this.channels.map(channel => {
+            let channelJson = channel.getJson();
+            channelJson.members = channel.members.map(
+                user => user.getJson()
+            );
+            return channelJson;
+        });
     }
 }
 Project.schema = {

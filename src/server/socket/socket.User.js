@@ -38,31 +38,13 @@ module.exports = function (io, client, realm) {
 
                     let userJson;
                     userJson = user.getJson();
-                    
                     userJson.projects = user.projects.map(project => {
                         let projectJson;
                         projectJson = project.getJson();
-                        projectJson.members = project.members.map(
-                            member => member.getJson()
-                        );
-                        // projectJson.creator = project.creator ?
-                        //     project.creator.getJson() : undefined;
-                        // projectJson.tasks = project.tasks.map(task => {
-                        //     let taskJson = task.getJson();
-                        //     taskJson.assigned = task.assigned.getJson();
-                        //     taskJson.subscribers = task.subscribers.map(
-                        //         user => user.getJson()
-                        //     );
-                        //     taskJson.project = task.project.getJson();
-                        //     return taskJson;
-                        // });
-                        // projectJson.channels = project.channels.map(channel => {
-                        //     let channelJson = channel.getJson();
-                        //     channelJson.members = channel.members.map(
-                        //         user => user.getJson()
-                        //     );
-                        //     return channelJson;
-                        // });
+                        projectJson.creator = project.getCreator();
+                        projectJson.members = project.getMembers();
+                        projectJson.tasks = project.getTasks();
+                        projectJson.channels = project.getChannels();
                         return projectJson;
                     });
                     console.log(userJson);
