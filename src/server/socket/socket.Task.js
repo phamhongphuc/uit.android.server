@@ -48,7 +48,9 @@ module.exports = function (io, client, realm) {
             if (!find) {
                 realm.write(() => {
                     task.subscribers.push(user);
-                    callback(null, taskId);
+                    let taskJson = task.getJson();
+                    taskJson.subscribers = task.getMember();
+                    callback(null, taskJson);
                 });
             } else {
                 callback('User đã tồn tại trong task, không thể thêm mới');

@@ -25,6 +25,11 @@ class Task {
         }, {});
         return json;
     }
+    getMembers() {
+        return this.subscribers.map(
+            subscriber => subscriber.getJson()
+        );
+    }
 }
 Task.schema = {
     name: 'Task',
