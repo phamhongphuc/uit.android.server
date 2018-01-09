@@ -67,7 +67,10 @@ module.exports = function (io, client, realm) {
                 if (!find) {
                     realm.write(() => {
                         project.members.push(user);
-                        callback(null, projectId);
+
+                        let projectJson = project.getJson();
+                        projectJson.members = project.getMembers();
+                        callback(null, projectJson);
                     });
                 } else {
                     callback('User đã tồn tại trong Project, không thể thêm mới');
