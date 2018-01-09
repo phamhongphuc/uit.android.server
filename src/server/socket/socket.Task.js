@@ -69,9 +69,14 @@ module.exports = function (io, client, realm) {
                 callback('User không có quyền thao tác chức năng này');
             } else {
                 realm.write(() => {
-                    task.lastupdate = new Date();
                     let newTask = realm.create('Task', task, true);
-                    callback(null, newTask.getJon());
+                    let taskJson = newTask.getJson();
+                    taskJson.assigned = newTask.assigned.getJson();
+                    taskJson.subscribers = newTask.subscribers.map(
+                        user => user.getJson()
+                    );
+                    taskJson.project = newTask.project.getJson();
+                    callback(null, taskJson);
                 });
             }
         }
