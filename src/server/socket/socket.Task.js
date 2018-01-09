@@ -20,14 +20,17 @@ module.exports = function (io, client, realm) {
                 let task = realm.create('Task', {
                     id: Task.getNextTaskId(),
                     name: 'newTask',
+                    description: 'Mô tả',
+                    status: 0,
+
                     createdate: moment().toDate(),
                     deadline: moment().add(1, 'week').toDate(),
-                    status: 0,
+                    lastupdate: new Date(),
+
                     assigned: user,
+                    subscribers: [user],
                     project: project,
-                    lastupdate: new Date()
                 });
-                task.subscribers.push(user);
                 callback(null, task.getJson());
                 console.log('  => return Create:Task(projectId, userId)');
             });

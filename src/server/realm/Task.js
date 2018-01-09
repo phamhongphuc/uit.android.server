@@ -6,7 +6,8 @@ class Task {
         return this.realm.objects('Task').find(object => object.id == taskId);
     }
     static getNextTaskId() {
-        return this.realm.objects('Task').max('id') + 1;
+        let tasks = this.realm.objects('Task');
+        return tasks.length == 0 ? 1 : tasks.max('id') + 1;
     }
     getJson() {
         let json = [
