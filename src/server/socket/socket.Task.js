@@ -9,9 +9,11 @@ import {
 module.exports = function (io, client, realm) {
     //Create Task
     client.on('Create:Task(projectId, userId)', (projectId, userId, callback = () => {}) => {
+        console.log('\nCreate:Task(projectId, userId)');
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!user || !project) {
+            console.log('  => Looix');
             callback('User hoặc Project không tồn tại');
         } else {
             realm.write(() => {
@@ -27,6 +29,7 @@ module.exports = function (io, client, realm) {
                 });
                 task.subscribers.push(user);
                 callback(null, task.getJson());
+                console.log('  => return Create:Task(projectId, userId)');
             });
         }
     });

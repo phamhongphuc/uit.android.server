@@ -3,10 +3,6 @@ import Project from '../realm/Project';
 import User from '../realm/User';
 
 module.exports = function (io, client, realm) {
-    // realm.objects('Project').addListener((puppies, changes) => {
-    //     // console.log('Project', puppies, changes);
-    // });
-
     //Create Project
     client.on('Create:Project(userId)', (userId, callback = () => {}) => {
         console.log(`\nCreate:Project(userId = ${userId})`);
@@ -82,6 +78,7 @@ module.exports = function (io, client, realm) {
 
     //Edit một Project
     client.on('Edit:Project(project, userId)', (project, userId, callback = () => {}) => {
+        console.log(`\nEdit:Project(project, userId)`);
         if (!project || !userId) {
             callback('Project hoặc User không tồn tại');
         } else {
@@ -95,6 +92,7 @@ module.exports = function (io, client, realm) {
                     let newProject = realm.create('Project', project, true);
                     callback(null, newProject.getJson());
                 });
+                console.log(`  => return project: ${project.id} - ${project.name}`);
             }
         }
     });
