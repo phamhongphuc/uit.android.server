@@ -13,7 +13,7 @@ module.exports = function (io, client, realm) {
         let project = Project.getProjectById(projectId);
         let user = User.getUserById(userId);
         if (!user || !project) {
-            console.log('  => Looix');
+            console.log('  => Lỗi');
             callback('User hoặc Project không tồn tại');
         } else {
             realm.write(() => {

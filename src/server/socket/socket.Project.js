@@ -54,7 +54,7 @@ module.exports = function (io, client, realm) {
     });
 
     //Thêm một thành viên vào Project = email
-    client.on('Add.Project.Member(projectId, email)', (projectId, email, callback = () => {}) => {
+    client.on('Add:Project.Member(projectId, email)', (projectId, email, callback = () => {}) => {
         let project = Project.getProjectById(projectId);
         if (!project) {
             callback('Project không tồn tại');
