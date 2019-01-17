@@ -6910,7 +6910,7 @@ vue-style-loader@^3.0.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-template-compiler@^2.5.13:
+vue-template-compiler@^2.5.22:
   version "2.5.22"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.5.22.tgz#c3d3c02c65f1908205c4fbd3b0ef579e51239955"
   dependencies:
@@ -6921,7 +6921,7 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.8.1.tgz#e2ec4f42d16b6c712e61899c6b20bcdb1df128ca"
 
-vue@^2.5.13:
+vue@^2.5.22:
   version "2.5.22"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.22.tgz#3bf88041af08b8539c37b268b70ca79245e9cc30"
 
